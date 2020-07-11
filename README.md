@@ -27,3 +27,13 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * `add(title)`: title を無期限の有効期限として登録
 * `list()`: ToDo DB のデータを一覧した文字列を返す
 * `reset()`: ToDo DB の内容を削除し，空のデータベースを作成
+
+## テスト用プログラム
+* test_regex.py
+  - 正規表現の確認プログラム
+  - 正規表現のパターンを入力し，その後，文字列を入力するとパターンにマッチしているかどうかを判定
+  - `python test_regex.py`
+
+* test_tododb.py
+  - tododb.py のテストプログラム
+  - tododb.py で定義した関数をテストするためのプログラム
