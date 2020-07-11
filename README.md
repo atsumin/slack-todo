@@ -26,4 +26,4 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * `add(title, limit_at)`: title と limit_at (有効期限) を登録
 * `add(title)`: title を無期限の有効期限として登録
 * `list()`: ToDo DB のデータを一覧した文字列を返す
-* `reset(): ToDo DB の内容を削除し，空のデータベースを作成
+* `reset()`: ToDo DB の内容を削除し，空のデータベースを作成
