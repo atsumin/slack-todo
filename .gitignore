@@ -1,0 +1,8 @@
+*.bak
+*~
+*.sh
+*.bat
+*.exe
+*.db
+.DS_Store
+__pycache__

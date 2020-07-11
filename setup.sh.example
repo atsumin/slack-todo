@@ -1,0 +1,2 @@
+export API_TOKEN={API Token for your Slack bots app}
+export TODO_DB=todo.db
