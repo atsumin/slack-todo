@@ -33,23 +33,20 @@ class Notice():
             post = False
             if dict["status"] == '未':                
                 if self.__limit_at < self.now + dt.timedelta(hours=1) and noticetime == 1:
-                    text = "期限まであと１時間。ひょっとして出し忘れてるんじゃ？:face_with_rolling_eyes::face_with_rolling_eyes:"
+                    text = "期限まであと１時間。ひょっとして提出し忘れてるんじゃ？:face_with_rolling_eyes::face_with_rolling_eyes:"
                     noticetime = 0
-                    color = '#ff4500'
+                    color = 'ff4500'
                     post = True
-                    # tools.postMessage(text, attachments, icon_emoji=":panda_face:") 
                 elif self.__limit_at < self.now + dt.timedelta(days=1) and noticetime == 2:
                     text = "期限まであと１日もありません！！のんびりしてる暇なんてありませんね:sweat_drops:"
                     noticetime = 1
                     color = 'ffff00'
                     post = True
-                    # tools.postMessage(text, attachments, icon_emoji=":panda_face:")
                 elif self.__limit_at < self.now + dt.timedelta(days=3) and noticetime == 3:
                     text = "期限まであと３日。そろそろとりかかろう...:sunglasses:"
                     noticetime = 2
                     color = '7cfc00'
                     post = True
-                    # tools.postMessage(text, attachments, icon_emoji=":panda_face:")
             if post == True:
                 attachments = [
                     {

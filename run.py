@@ -24,7 +24,8 @@ def noticeThread():
     while True:
         nt = Notice()
         del nt
-        time.sleep(300)
+        # デバックを容易にするため、待機は30秒のみ
+        time.sleep(30)
 
 def botThread():
     mybot = Bot()
