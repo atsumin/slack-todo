@@ -9,7 +9,6 @@ from dateutil.relativedelta import relativedelta
 def datetrans(limit_at, now, mode=0):
     #　例で2020年8月16日19時18分のコマンドを記述しておく
     limit_at_str = ''
-    # limit_at_format = ''
     date_format = "%Y%m%d%H%M"
     limit_at = limit_at.replace("/","")
     limit_at = limit_at.replace(":","")
