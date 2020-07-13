@@ -27,6 +27,11 @@ class DB(object):
         self.__c.execute(sql, [title, limit_at, update_at])
         self.__conn.commit()
 
+    def change_id(self, id, column, value):
+        sql = f'UPDATE todo SET {column} = "{value}" WHERE id = {id}'
+        self.__c.execute(sql)
+        self.__conn.commit()
+
     def list(self):
         str_list = "TODO list:\n"
         for r in self.__c.execute("select * from todo"):
