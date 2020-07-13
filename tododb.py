@@ -34,6 +34,27 @@ class DB(object):
         self.__drop_table()
         self.__create_table()
 
+    
+    # idでデータを取得してdict形式で返す
+    # idが存在しない値であるときは全要素Noneで返すので注意
+    def select_id(self, id):
+        dict_list = []
+        columns = self.__conn.execute("select * from todo").description
+        for r in self.__c.execute(f"select * from todo where id=={id}"):
+            item = list(map(str, r))
+            dict = {}
+            for i in range(len(columns)):
+                dict[columns[i][0]] = item[i]
+                i += 1
+            dict_list.append(dict)
+        if len(dict_list) == 0:
+            dict = {}
+            for i in range(len(columns)):
+                dict[columns[i][0]] = None
+                i += 1
+            dict_list.append(dict)
+        return dict_list[0]
+
 
     # 追加するデータをdictionaryで受け取る
     # 引数 (self,追加したいデータ)
