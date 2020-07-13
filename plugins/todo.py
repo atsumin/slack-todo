@@ -41,3 +41,13 @@ def todo_reset(message):
     database = DB(os.environ['TODO_DB'])
     database.reset()
     message.reply('データベースを初期化しました')
+
+@respond_to(r'\s+todo\s+search\s+(\S+)$')
+def todo_search(message, text):
+    database = DB(os.environ['TODO_DB'])
+    ids = tools.search('title', text, database.dict_list())
+    str_list = database.list_design(ids)
+    if str_list == '一致したassignment:\n':
+        message.reply('そのようなassignmentは存在しません')
+    else:
+        message.reply(str_list)

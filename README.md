@@ -10,11 +10,13 @@ ToDo 管理とその他さまざまな反応をする slackbot
 
 * plugins/listen.py
   - チャンネル内で 'what' を含む文字列の発言に対して「??」と返す
+  - ! で始まるものをコマンドとみなし、todo.pyと同様の内容を実行する(todoの入力は省略)
 
 * plugins/todo.py
   - `@bot todo add 'タイトル' [締切]`: ToDo 内容を登録する
   - `@bot todo list`: ToDo の一覧を表示する
   - `@bot todo reset`: ToDo の DB をリセットする
+  - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
 
 ## ToDo DBのスキーマ
 | id | title |     limit_at     |    update_at     | status |  noticetime  |

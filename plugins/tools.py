@@ -3,6 +3,7 @@ import os
 import datetime
 import requests
 import json
+import re
 from dateutil.relativedelta import relativedelta
 
 #userが入力した文字列(limit_at)を既定の形式に変換する
@@ -133,3 +134,13 @@ def noticetimeSet(limit_at:datetime, now):
     elif diff < datetime.timedelta(days=3):
         noticetime = 2
     return noticetime
+
+# DB.dict_list()で取得したdict_listからcolumnにおいてtextを含むもののidを返す
+def search(column, text, dict_list):
+    ids = []
+    for dict in dict_list:
+        text_compile = re.compile(text) 
+        value = dict[column]
+        if text_compile.match(value):
+            ids.append(dict['id'])
+    return ids

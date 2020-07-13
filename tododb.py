@@ -107,6 +107,15 @@ class DB(object):
             str_list += '\n'
         return str_list
 
+    def list_design(self, ids):
+        str_list = "一致したassignment:\n"
+        for id in ids:
+            for r in self.__c.execute(f'select * from todo where id = {id}'):
+                str_list += ', '.join(map(str, r))
+                str_list += '\n'
+        return str_list
+
+
     def dict_list(self):
         dict_list = []
         columns = self.__conn.execute("select * from todo").description
