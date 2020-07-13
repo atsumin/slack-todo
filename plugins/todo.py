@@ -16,12 +16,12 @@ def todo_add(message, title, limit_at):
         msg = "以下の内容で追加しました。\ntitle:" + title + \
             "\nlimit:" + limit_at + "\nstatus:" + status
     else:
-        if now > datetime.datetime.strftime(limit_at_fin, '%Y/%m/%d %H:%M'):
+        if now > datetime.datetime.strptime(limit_at_fin, '%Y/%m/%d %H:%M'):
             status = '期限切れ'
-            database.add_dict(
-                {"title": title, "limit_at": limit_at_fin, "status": status})
-            msg = "以下の内容で、期限を正しく設定して追加しました。\ntitle:" + title + \
-                "\nlimit:" + limit_at_fin + "\nstatus:" + status
+        database.add_dict(
+            {"title": title, "limit_at": limit_at_fin, "status": status})
+        msg = "以下の内容で、期限を正しく設定して追加しました。\ntitle:" + title + \
+            "\nlimit:" + limit_at_fin + "\nstatus:" + status
     message.reply(msg)
 
 @respond_to(r'\s+todo\s+add\s+(\S+)$')
