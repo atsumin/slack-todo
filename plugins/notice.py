@@ -18,6 +18,7 @@ class Notice():
         self.now = dt.datetime.now()
         db = DB(os.environ['TODO_DB'])
         self.dict_list = db.dict_list()
+        self.channel = os.environ['SLACK_CHANNEL']
         for dict in self.dict_list:
             noticetime = int(dict['noticetime'])
             try:
@@ -64,7 +65,7 @@ class Notice():
                         ]
                     }
                 ] 
-                tools.postMessage(text, attachments, icon_emoji=":panda_face:")
+                tools.postMessage(text, attachments, channel=self.channel, icon_emoji=":panda_face:")
                 db.change_id(dict['id'], 'noticetime', noticetime)
 
 
