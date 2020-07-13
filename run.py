@@ -21,10 +21,10 @@ if need_init:
 
 def noticeThread():
     time.sleep(10)
-    nt = Notice()
     while True:
+        nt = Notice()
+        del nt
         time.sleep(300)
-        nt.notice()
 
 def botThread():
     mybot = Bot()
