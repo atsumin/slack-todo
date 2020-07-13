@@ -141,6 +141,6 @@ def search(column, text, dict_list):
     for dict in dict_list:
         text_compile = re.compile(text) 
         value = dict[column]
-        if text_compile.match(value):
+        if text_compile.search(value):
             ids.append(dict['id'])
     return ids
