@@ -17,10 +17,10 @@ ToDo 管理とその他さまざまな反応をする slackbot
   - `@bot todo reset`: ToDo の DB をリセットする
 
 ## ToDo DBのスキーマ
-| id | title |     limit_at     |    update_at     | status |
-|----|-------|------------------|------------------|--------|
-|  1 | test1 | 2020/04/30 23:59 | 2020/04/01 13:10 |   済   |
-|  2 | test2 | 2020/07/30 7:05  | 2020/06/01 17:00 |   未   |
+| id | title |     limit_at     |    update_at     | status |  noticetime  |
+|----|-------|------------------|------------------|--------|--------------|
+|  1 | test1 | 2020/04/30 23:59 | 2020/04/01 13:10 |   済   |       0      |
+|  2 | test2 | 2020/07/30 7:05  | 2020/06/01 17:00 |   未   |       3      |
 
 ## ToDo DBの操作関数
 * `add(title, limit_at)`: title と limit_at (有効期限) を登録
@@ -30,6 +30,7 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * `add_dict()`:列名をkey、データの値をvalueとするdictのデータをToDo DBに登録　#6　に詳細あり
 * `dict_list()`ToDo DB の各データをそれぞれdictにして、dictのリストを返す #6　に詳細あり
 * `select_id()`指定したidのデータをdictにして返す #6　に詳細あり
+* `change_id(id, column, value)`指定したidのデータの値を変更する
 
 ## テスト用プログラム
 * test_regex.py

@@ -4,9 +4,9 @@ import re
 import time
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
-           "update_at": "2000/01/01 0:00", "status": "未"}
+           "update_at": "2000/01/01 0:00", "status": "未", "noticetime":3}
 DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
-                "update_at": "text NOT NULL", "status": "text"}
+                "update_at": "text NOT NULL", "status": "text", "noticetime":"integer NOT NULL"}
 
 
 class DB(object):

@@ -1,7 +1,12 @@
 from slacker import Slacker
 from slackbot.bot import Bot
 from tododb import DB
+from plugins.notice import Notice
 import os
+import threading
+import datetime
+import time
+import sys
 
 slack = Slacker(os.environ['API_TOKEN'])
 channel = os.environ['SLACK_CHANNEL']
@@ -13,5 +18,32 @@ database = DB(dbname)
 if need_init:
     database.init()
 
-mybot = Bot()
-mybot.run()
+
+def noticeThread():
+    time.sleep(10)
+    nt = Notice()
+    while True:
+        time.sleep(300)
+        nt.notice()
+
+def botThread():
+    mybot = Bot()
+    mybot.run()
+
+def stop():
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        print('プログラムを終了します...')
+        sys.exit()
+
+if __name__ == '__main__':
+    n_t = threading.Thread(target=noticeThread)
+    b_t = threading.Thread(target=botThread)
+    n_t.setDaemon(True)
+    b_t.setDaemon(True)
+    n_t.start()
+    b_t.start()
+
+    stop()

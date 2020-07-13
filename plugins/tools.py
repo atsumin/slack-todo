@@ -121,3 +121,15 @@ def updateMessage(text, attachments:list, ts, channel, username="お知らせ", 
     url = 'https://slack.com/api/chat.update'
     r_post = requests.post(url, headers=headers, json=data)
     return json.loads(r_post.text)
+
+
+def noticetimeSet(limit_at:datetime, now):
+    diff = limit_at - now
+    noticetime = 3
+    if diff < datetime.timedelta(hours=1):
+        noticetime = 0
+    elif diff < datetime.timedelta(days=1):
+        noticetime = 1
+    elif diff < datetime.timedelta(days=3):
+        noticetime = 2
+    return noticetime
