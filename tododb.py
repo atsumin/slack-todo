@@ -1,6 +1,7 @@
 import sqlite3
 import datetime
 import re
+import time
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
            "update_at": "2000/01/01 0:00", "status": "未"}
@@ -80,5 +81,20 @@ class DB(object):
             str_list += ', '.join(map(str, r))
             str_list += '\n'
         return str_list
+
+    def dict_list(self):
+        dict_list = []
+        columns = self.__conn.execute("select * from todo").description
+        for i in range(20):
+            fromnum = i*50+1
+            tonum = (i+1)*50
+            for r in self.__c.execute(f"select * from todo WHERE id BETWEEN {fromnum} and {tonum}"):
+                item = list(map(str, r))
+                dict = {}
+                for i in range(len(columns)):
+                    dict[columns[i][0]] = item[i]
+                    i += 1
+                dict_list.append(dict)
+        return dict_list
 
 
