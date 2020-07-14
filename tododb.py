@@ -90,10 +90,14 @@ class DB(object):
         self.__c.execute(sql, datalist)
         self.__conn.commit()
 
+
     def change_id(self, id, column, value):
+        """idを指定してcolumnの値をvalueに変更
+        """
         sql = f'UPDATE todo SET {column} = "{value}" WHERE id = {id}'
         self.__c.execute(sql)
         self.__conn.commit()
+
 
     def add(self, title, limit_at):
         update_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -105,14 +109,6 @@ class DB(object):
         for r in self.__c.execute("select * from todo"):
             str_list += ', '.join(map(str, r))
             str_list += '\n'
-        return str_list
-
-    def list_design(self, ids):
-        str_list = "一致したassignment:\n"
-        for id in ids:
-            for r in self.__c.execute(f'select * from todo where id = {id}'):
-                str_list += ', '.join(map(str, r))
-                str_list += '\n'
         return str_list
 
 
@@ -131,11 +127,14 @@ class DB(object):
                 dict_list.append(dict)
         return dict_list
 
+
     def search(self, column, text):
+        """columnの値にtextが含まれる場合そのデータをdict形式で返す
+        """
         matched = []
         dict_list = self.dict_list()
+        text_compile = re.compile(text)
         for dict in dict_list:
-            text_compile = re.compile(text)
             value = dict[column]
             if text_compile.search(value):
                 matched.append(dict)

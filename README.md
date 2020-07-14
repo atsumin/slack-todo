@@ -33,6 +33,7 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * `dict_list()`ToDo DB の各データをそれぞれdictにして、dictのリストを返す #6　に詳細あり
 * `select_id()`指定したidのデータをdictにして返す #6　に詳細あり
 * `change_id(id, column, value)`指定したidのデータの値を変更する
+* `search(column, text)`columnの値にtextが含まれる場合そのデータをdict形式で返す
 
 ## テスト用プログラム
 * test_regex.py
