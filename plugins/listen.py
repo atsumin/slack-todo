@@ -11,6 +11,7 @@ def com_set(message):
     todo_list = re.search(r'^list$', text)
     todo_reset = re.search(r'^reset$', text)
     todo_search = re.search(r'^search\s+(\S+)$', text)
+    todo_search_new = re.search(r'^searchnew\s+(\S+)$', text)
 
     if todo_add:
         todo.todo_add(message, todo_add.group(1), todo_add.group(2))
@@ -20,6 +21,8 @@ def com_set(message):
         todo.todo_reset(message)
     elif todo_search:
         todo.todo_search(message, todo_search.group(1))
+    elif todo_search_new:
+        todo.todo_search_new(message, todo_search_new.group(1))
     else:
         message.reply('このコマンドは無効です')
 

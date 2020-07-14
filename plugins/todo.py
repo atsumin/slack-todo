@@ -51,3 +51,19 @@ def todo_search(message, text):
         message.reply('そのようなassignmentは存在しません')
     else:
         message.reply(str_list)
+
+@respond_to(r'\s+todo\s+searchnew\s+(\S+)$')
+def todo_search_new(message, text):
+    msg = ''
+    num = 0
+    database = DB(os.environ['TODO_DB'])    
+    dict_list = database.dict_list()
+    matched = tools.search_new('title', text, dict_list)
+    if matched == []:
+        msg = '一致するassigmentは存在しません'
+    else:
+        for data in matched:
+            num += 1
+            msg += f'\n{data["title"]}, 期限:{data["limit_at"]}, status:{data["status"]}, id:{data["id"]}'
+        msg = f'一致するassignmentは以下の{num}件です。' + msg
+    message.reply(msg)
