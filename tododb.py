@@ -34,6 +34,21 @@ class DB(object):
         self.__drop_table()
         self.__create_table()
 
+
+    # idの値がとびとびになってしまった際や列を追加した際のアップデート
+    def clean(self):
+        dict_list = self.dict_list()
+        self.__drop_table()
+        self.__create_table()
+        for i in range(len(dict_list)):
+            # 本来ないはずだが不正なデータは追加しない
+            if dict_list[i]["title"] == None or dict_list[i]["title"] == "None":
+                continue
+            if dict_list[i]["update_at"] == None or dict_list[i]["update_at"] == "None":
+                continue
+            self.add_dict(dict_list[i])
+
+
     
     # idでデータを取得してdict形式で返す
     # idが存在しない値であるときは全要素Noneで返すので注意
