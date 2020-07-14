@@ -25,18 +25,32 @@ class DB(object):
         self.__c.execute(f"create table todo {msg}")
 
     def __drop_table(self):
+        """テーブルを削除する
+
+        todo.dbというファイル自体は残る
+        """
         self.__c.execute("drop table todo")
 
     def init(self):
+        "todo.db作成時に最初に行う関数"
         self.__create_table()
 
     def reset(self):
+        """一度テーブルを削除して再生成する
+
+        このとき、テーブル内のデータはなくなる
+        """
         self.__drop_table()
         self.__create_table()
 
 
-    # idの値がとびとびになってしまった際や列を追加した際のアップデート
     def clean(self):
+        """一度テーブルを削除して再生成する
+
+        このとき、テーブル内のデータは保たれる
+        
+        idの値がとびとびになってしまった際や列を追加した際にアップデートとして用いられる
+        """
         dict_list = self.dict_list()
         self.__drop_table()
         self.__create_table()
@@ -50,35 +64,41 @@ class DB(object):
 
 
     
-    # idでデータを取得してdict形式で返す
-    # idが存在しない値であるときは全要素Noneで返すので注意
-    def select_id(self, id):
+    def select_id(self, id: str) -> dict:
+        """idでデータを取得してdict形式で返す
+
+        idが存在しない値であるときは全要素Noneで返すので注意
+        """
         dict_list = []
         columns = self.__conn.execute("select * from todo").description
         for r in self.__c.execute(f"select * from todo where id=={id}"):
             item = list(map(str, r))
-            dict = {}
+            data = {}
             for i in range(len(columns)):
-                dict[columns[i][0]] = item[i]
+                data[columns[i][0]] = item[i]
                 i += 1
-            dict_list.append(dict)
+            dict_list.append(data)
         if len(dict_list) == 0:
-            dict = {}
+            data = {}
             for i in range(len(columns)):
-                dict[columns[i][0]] = None
+                data[columns[i][0]] = None
                 i += 1
-            dict_list.append(dict)
+            dict_list.append(data)
         return dict_list[0]
 
 
-    # 追加するデータをdictionaryで受け取る
-    # 引数 (self,追加したいデータ)
-    def add_dict(self, dict):
+    def add_dict(self, data:dict):
+        """追加するデータをdictionaryで受け取る
+        
+        引数 (self,追加したいデータ:dict)
+
+        dictの要素の過不足はDEFAULTが補正してくれる
+        """
         # 基本としてデフォルトを読み込む
         newdata = {}
         for key in DEFAULT.keys():
             newdata[key] = DEFAULT[key]
-        dict_items = dict.items()
+        dict_items = data.items()
         # dictの中身をnewdataに上書き
         for item in dict_items:
             if item[0] in newdata.keys():
@@ -105,24 +125,41 @@ class DB(object):
         self.__c.execute(sql, datalist)
         self.__conn.commit()
 
-    def change_id(self, id, column, value):
+    def change_id(self, id: int, column: str, value):
+        """idに対応するデータのある列の値を変更する
+        
+        現状ではvalueは不正な値でも変更できてしまう
+        """
         sql = f'UPDATE todo SET {column} = "{value}" WHERE id = {id}'
         self.__c.execute(sql)
         self.__conn.commit()
 
-    def add(self, title, limit_at):
+    def add(self, title: str, limit_at: str):
+        """title と limit_at (有効期限) を登録
+        
+        これは既存のシステムを保つためにあるものなので、add_dict()を使ってほしい
+        """
         update_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.add_dict({"title":title,"limit_at":limit_at,"update_at":update_at})
 
 
-    def list(self):
+    def list(self) -> str:
+        """ToDo DB のデータを一覧した文字列を返す
+
+        先頭には"TODO list:"がつくというおまけつき
+        """
         str_list = "TODO list:\n"
         for r in self.__c.execute("select * from todo"):
             str_list += ', '.join(map(str, r))
             str_list += '\n'
         return str_list
 
-    def dict_list(self):
+    def dict_list(self) ->list:
+        """ToDo DB の各データをそれぞれdictにして、dictのリストを返す
+
+        戻り値の形
+        [{データ1 dict},{データ2 dict},{データ3 dict}]
+        """
         dict_list = []
         columns = self.__conn.execute("select * from todo").description
         for i in range(20):
@@ -130,11 +167,11 @@ class DB(object):
             tonum = (i+1)*50
             for r in self.__c.execute(f"select * from todo WHERE id BETWEEN {fromnum} and {tonum}"):
                 item = list(map(str, r))
-                dict = {}
+                data = {}
                 for i in range(len(columns)):
-                    dict[columns[i][0]] = item[i]
+                    data[columns[i][0]] = item[i]
                     i += 1
-                dict_list.append(dict)
+                dict_list.append(data)
         return dict_list
 
 
