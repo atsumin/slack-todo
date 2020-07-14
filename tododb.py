@@ -129,7 +129,9 @@ class DB(object):
 
 
     def search(self, column, text):
-        """columnの値にtextが含まれる場合そのデータをdict形式で返す
+        """columnの値にtextが含まれる場合そのデータをlist形式(要素はdict形式)で返す
+
+        マッチするものがない場合、空のリストで返す
         """
         matched = []
         dict_list = self.dict_list()
