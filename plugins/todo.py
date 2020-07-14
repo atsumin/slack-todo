@@ -44,21 +44,10 @@ def todo_reset(message):
 
 @respond_to(r'\s+todo\s+search\s+(\S+)$')
 def todo_search(message, text):
-    database = DB(os.environ['TODO_DB'])
-    ids = tools.search('title', text, database.dict_list())
-    str_list = database.list_design(ids)
-    if str_list == '一致したassignment:\n':
-        message.reply('そのようなassignmentは存在しません')
-    else:
-        message.reply(str_list)
-
-@respond_to(r'\s+todo\s+searchnew\s+(\S+)$')
-def todo_search_new(message, text):
     msg = ''
     num = 0
-    database = DB(os.environ['TODO_DB'])    
-    dict_list = database.dict_list()
-    matched = tools.search_new('title', text, dict_list)
+    database = DB(os.environ['TODO_DB'])
+    matched = database.search('title', text)
     if matched == []:
         msg = '一致するassigmentは存在しません'
     else:

@@ -131,4 +131,14 @@ class DB(object):
                 dict_list.append(dict)
         return dict_list
 
+    def search(self, column, text):
+        matched = []
+        dict_list = self.dict_list()
+        for dict in dict_list:
+            text_compile = re.compile(text)
+            value = dict[column]
+            if text_compile.search(value):
+                matched.append(dict)
+        return matched
+
 
