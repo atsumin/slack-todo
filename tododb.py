@@ -168,9 +168,12 @@ class DB(object):
             if key == column:
                 status_code = 401
                 for db_id in self.__c.execute('select id from todo'):
-                    if db_id[0] == int(id):
-                        status_code = 200
-                        break
+                    try:
+                        if db_id[0] == int(id):
+                            status_code = 200
+                            break
+                    except:
+                        status_code = 401
         if status_code == 200:
             try:
                 sql = f'UPDATE todo SET {column} = "{value}", \
