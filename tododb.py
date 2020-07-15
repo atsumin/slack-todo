@@ -2,6 +2,7 @@ import sqlite3
 import datetime
 import re
 import time
+from plugins import tools
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
            "update_at": "2000/01/01 0:00", "status": "未", "noticetime":3}
@@ -128,27 +129,53 @@ class DB(object):
 
     def change_id(self, id, column, value):
         """idを指定してcolumnの値をvalueに変更
-        columnが不正(idを指定する時も含む)の時 0 , idが不正の時 1, 
-        sql文が正常に実行できなかった時 2, 正常に処理が完了した時 3 を返す
+        columnが不正(idを指定する時も含む)の時 400 , idが不正の時 401, 
+        sql文が正常に実行できなかった時 402, columnがlimit_atで不正な値の時 403, 
+        正常に処理が完了した時 200 を返す
 
-        ただし、columnが不正な時にidを調べないのでcolumnとidどちらも不正の時は 0 を返す
+        ただし、columnが不正な時にidを調べないのでcolumnとidどちらも不正の時は 400 を返す
         """
-        status_code = 0
+        status_code = 400
         keys = DEFAULT.keys()
+        now = datetime.datetime.now()
+        now_f = str(now)[0:19]
         for key in keys:
             if key == column:
-                status_code = 1
+                status_code = 401
+                if column == 'limit_at':
+                    status_code = 10
+                    break
                 for db_id in self.__c.execute('select id from todo'):
                     if db_id[0] == int(id):
-                        status_code = 3
+                        status_code = 200
                         break
-        if status_code == 3:
+        if status_code == 200:
             try:
-                sql = f'UPDATE todo SET {column} = "{value}" WHERE id = {id}'
+                sql = f'UPDATE todo SET {column} = "{value}", \
+                    update_at = "{now_f}" WHERE id = {id}'
                 self.__c.execute(sql)
                 self.__conn.commit()
             except sqlite3.Error:
-                status_code = 2
+                status_code = 402
+        if status_code == 10:
+            status = '未'
+            limit_at_fin = tools.datetrans(value, now)
+            if limit_at_fin == None:
+                status_code = 403
+            else:
+                limit_at_format = datetime.datetime.strptime(limit_at_fin, '%Y/%m/%d %H:%M')
+                if now > limit_at_format:
+                    status = '期限切れ'
+                noticetime = tools.noticetimeSet(limit_at_format, now)
+                try:
+                    sql = f'UPDATE todo SET {column} = "{limit_at_fin}", \
+                        status = "{status}", noticetime = "{noticetime}", \
+                            update_at = "{now_f}" WHERE id = {id}'
+                    self.__c.execute(sql)
+                    self.__conn.commit()
+                    status_code = 200
+                except sqlite3.Error:
+                    status_code = 402
         return status_code
 
     def add(self, title: str, limit_at: str):
