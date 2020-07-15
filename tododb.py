@@ -129,11 +129,10 @@ class DB(object):
 
     def change_id(self, id, column, value):
         """idを指定してcolumnの値をvalueに変更
-        columnが不正の時 400 , idが不正の時 401, 
+
+        columnが不正の時 400, idが不正の時 401, 
         sql文が正常に実行できなかった時 402, columnがlimit_atで不正な値の時 403, columnにidまたはupdate_atを指定した時 404
-
         正常に処理が完了した時 200 を返す
-
         ただし, カラムが不正な場合, idについては調べないので両方が不正な場合は400を返す 
         """
         status_code = 400
