@@ -70,6 +70,8 @@ def todo_change_id(message, id, column, value):
         msg = 'sqlite文が実行できません'
     elif status_code == 403:
         msg = 'limit_atを正しく入力してください'
+    elif status_code == 404:
+        msg = 'idまたはupdate_atを変更することはできません'
     elif status_code == 200:
         msg = '値を変更しました'
     message.reply(msg)

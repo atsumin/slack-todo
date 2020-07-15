@@ -129,39 +129,26 @@ class DB(object):
 
     def change_id(self, id, column, value):
         """idを指定してcolumnの値をvalueに変更
-        columnが不正(idを指定する時も含む)の時 400 , idが不正の時 401, 
-        sql文が正常に実行できなかった時 402, columnがlimit_atで不正な値の時 403, 
+        columnが不正の時 400 , idが不正の時 401, 
+        sql文が正常に実行できなかった時 402, columnがlimit_atで不正な値の時 403, columnにidまたはupdate_atを指定した時 404
+
         正常に処理が完了した時 200 を返す
 
-        ただし、columnが不正な時にidを調べないのでcolumnとidどちらも不正の時は 400 を返す
+        ただし, カラムが不正な場合, idについては調べないので両方が不正な場合は400を返す 
         """
         status_code = 400
         keys = DEFAULT.keys()
         now = datetime.datetime.now()
         now_f = str(now)[0:19]
-        for key in keys:
-            if key == column:
-                status_code = 401
-                if column == 'limit_at':
-                    status_code = 10
-                    break
-                for db_id in self.__c.execute('select id from todo'):
-                    if db_id[0] == int(id):
-                        status_code = 200
-                        break
-        if status_code == 200:
-            try:
-                sql = f'UPDATE todo SET {column} = "{value}", \
-                    update_at = "{now_f}" WHERE id = {id}'
-                self.__c.execute(sql)
-                self.__conn.commit()
-            except sqlite3.Error:
-                status_code = 402
-        if status_code == 10:
+        if column == 'id' or column == 'update_at':
+            status_code = 404
+            return status_code
+        if column == 'limit_at':
             status = '未'
             limit_at_fin = tools.datetrans(value, now)
             if limit_at_fin == None:
                 status_code = 403
+                return status_code
             else:
                 limit_at_format = datetime.datetime.strptime(limit_at_fin, '%Y/%m/%d %H:%M')
                 if now > limit_at_format:
@@ -176,6 +163,23 @@ class DB(object):
                     status_code = 200
                 except sqlite3.Error:
                     status_code = 402
+                return status_code
+        for key in keys:
+            if key == column:
+                status_code = 401
+                for db_id in self.__c.execute('select id from todo'):
+                    if db_id[0] == int(id):
+                        status_code = 200
+                        break
+        if status_code == 200:
+            try:
+                sql = f'UPDATE todo SET {column} = "{value}", \
+                    update_at = "{now_f}" WHERE id = {id}'
+                self.__c.execute(sql)
+                self.__conn.commit()
+            except sqlite3.Error:
+                status_code = 402
+
         return status_code
 
     def add(self, title: str, limit_at: str):
