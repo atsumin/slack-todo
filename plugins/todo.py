@@ -56,3 +56,18 @@ def todo_search(message, text):
             msg += f'\n{data["title"]}, 期限:{data["limit_at"]}, status:{data["status"]}, id:{data["id"]}'
         msg = f'一致するassignmentは以下の{num}件です。' + msg
     message.reply(msg)
+
+@respond_to(r'\s*todo\s+change\s+(\S+)\s+(\S+)\s+(\S+)$')
+def todo_change_id(message, id, column, value):
+    database = DB(os.environ['TODO_DB'])
+    status_code = database.change_id(id, column, value)
+    msg = ''
+    if status_code == 0:
+        msg = 'カラムが不正です'
+    elif status_code == 1:
+        msg = 'idが不正です'
+    elif status_code == 2:
+        msg = 'sqlite文が実行できません'
+    elif status_code == 3:
+        msg = '値を変更しました'
+    message.reply(msg)

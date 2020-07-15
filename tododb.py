@@ -128,10 +128,28 @@ class DB(object):
 
     def change_id(self, id, column, value):
         """idを指定してcolumnの値をvalueに変更
+        columnが不正(idを指定する時も含む)の時 0 , idが不正の時 1, 
+        sql文が正常に実行できなかった時 2, 正常に処理が完了した時 3 を返す
+
+        ただし、columnが不正な時にidを調べないのでcolumnとidどちらも不正の時は 0 を返す
         """
-        sql = f'UPDATE todo SET {column} = "{value}" WHERE id = {id}'
-        self.__c.execute(sql)
-        self.__conn.commit()
+        status_code = 0
+        keys = DEFAULT.keys()
+        for key in keys:
+            if key == column:
+                status_code = 1
+                for db_id in self.__c.execute('select id from todo'):
+                    if db_id[0] == int(id):
+                        status_code = 3
+                        break
+        if status_code == 3:
+            try:
+                sql = f'UPDATE todo SET {column} = "{value}" WHERE id = {id}'
+                self.__c.execute(sql)
+                self.__conn.commit()
+            except sqlite3.Error:
+                status_code = 2
+        return status_code
 
     def add(self, title: str, limit_at: str):
         """title と limit_at (有効期限) を登録
