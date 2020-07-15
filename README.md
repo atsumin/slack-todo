@@ -10,17 +10,19 @@ ToDo 管理とその他さまざまな反応をする slackbot
 
 * plugins/listen.py
   - チャンネル内で 'what' を含む文字列の発言に対して「??」と返す
+  - ! で始まるものをコマンドとみなし、todo.pyと同様の内容を実行する(todoの入力は省略)
 
 * plugins/todo.py
   - `@bot todo add 'タイトル' [締切]`: ToDo 内容を登録する
   - `@bot todo list`: ToDo の一覧を表示する
   - `@bot todo reset`: ToDo の DB をリセットする
+  - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
 
 ## ToDo DBのスキーマ
-| id | title |     limit_at     |    update_at     | status |
-|----|-------|------------------|------------------|--------|
-|  1 | test1 | 2020/04/30 23:59 | 2020/04/01 13:10 |   済   |
-|  2 | test2 | 2020/07/30 7:05  | 2020/06/01 17:00 |   未   |
+| id | title |     limit_at     |    update_at     | status |  noticetime  |
+|----|-------|------------------|------------------|--------|--------------|
+|  1 | test1 | 2020/04/30 23:59 | 2020/04/01 13:10 |   済   |       0      |
+|  2 | test2 | 2020/07/30 7:05  | 2020/06/01 17:00 |   未   |       3      |
 
 ## ToDo DBの操作関数
 * `add(title, limit_at)`: title と limit_at (有効期限) を登録
@@ -30,6 +32,8 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * `add_dict()`:列名をkey、データの値をvalueとするdictのデータをToDo DBに登録　#6　に詳細あり
 * `dict_list()`ToDo DB の各データをそれぞれdictにして、dictのリストを返す #6　に詳細あり
 * `select_id()`指定したidのデータをdictにして返す #6　に詳細あり
+* `change_id(id, column, value)`指定したidのデータの値を変更する
+* `search(column, text)`columnの値にtextが含まれる場合そのデータをlist形式(要素はdict形式)で返す
 
 ## テスト用プログラム
 * test_regex.py

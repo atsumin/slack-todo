@@ -4,9 +4,9 @@ import re
 import time
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
-           "update_at": "2000/01/01 0:00", "status": "未"}
+           "update_at": "2000/01/01 0:00", "status": "未", "noticetime":3}
 DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
-                "update_at": "text NOT NULL", "status": "text"}
+                "update_at": "text NOT NULL", "status": "text", "noticetime":"integer NOT NULL"}
 
 
 class DB(object):
@@ -125,10 +125,9 @@ class DB(object):
         self.__c.execute(sql, datalist)
         self.__conn.commit()
 
-    def change_id(self, id: int, column: str, value):
-        """idに対応するデータのある列の値を変更する
-        
-        現状ではvalueは不正な値でも変更できてしまう
+
+    def change_id(self, id, column, value):
+        """idを指定してcolumnの値をvalueに変更
         """
         sql = f'UPDATE todo SET {column} = "{value}" WHERE id = {id}'
         self.__c.execute(sql)
@@ -173,5 +172,20 @@ class DB(object):
                     i += 1
                 dict_list.append(data)
         return dict_list
+
+
+    def search(self, column, text):
+        """columnの値にtextが含まれる場合そのデータをlist形式(要素はdict形式)で返す
+
+        マッチするものがない場合、空のリストで返す
+        """
+        matched = []
+        dict_list = self.dict_list()
+        text_compile = re.compile(text)
+        for dict in dict_list:
+            value = dict[column]
+            if text_compile.search(value):
+                matched.append(dict)
+        return matched
 
 
