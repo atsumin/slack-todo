@@ -1,4 +1,3 @@
-from tododb import DB
 import os
 import datetime
 import requests
