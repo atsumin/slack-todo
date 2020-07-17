@@ -5,6 +5,25 @@ import json
 import re
 from dateutil.relativedelta import relativedelta
 
+
+# 今後誰かが取得したくなった時の参考にchannel名、相手の名前等を取得する方法を載せておく
+def getmsginfo(message)-> dict:
+    """ユーザー情報をdict形式で返す
+    現在得られるのは
+    
+    channel:チャンネル名
+
+    user_id:ユーザー固有のid
+
+    user_name:ユーザー名
+    """
+    info_dict={}
+    info_dict["channel"] = message.channel._body["name"]
+    info_dict["user_id"] = message.user["id"]
+    info_dict["user_name"] = message.user["real_name"]
+    return info_dict
+
+
 #userが入力した文字列(limit_at)を既定の形式に変換する
 def datetrans(limit_at, now, mode=0):
     #　例で2020年8月16日19時18分のコマンドを記述しておく
