@@ -20,6 +20,9 @@ class Notice():
         self.dict_list = db.dict_list()
         self.channel = os.environ['SLACK_CHANNEL']
         for dict in self.dict_list:
+            # 前バージョンとの互換性を保つ
+            if not "noticetime" in dict.keys():
+                continue
             noticetime = int(dict['noticetime'])
             try:
                 self.__limit_at = dt.datetime.strptime(dict["limit_at"], '%Y/%m/%d %H:%M')
