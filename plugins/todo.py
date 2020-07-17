@@ -24,6 +24,8 @@ def todo_add(message, title, limit_at):
     data = database.add_dict(data)
     msg += "追加しました。"
     for item in data.items():
+        if item[0]=="user":
+            continue
         msg+=f"\n{item[0]}: {item[1]}"
     message.reply(msg)
 
