@@ -5,9 +5,9 @@ import time
 from plugins import tools
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
-           "update_at": "2000/01/01 0:00", "status": "未", "noticetime":3}
+           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None}
 DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
-                "update_at": "text NOT NULL", "status": "text", "noticetime":"integer NOT NULL"}
+                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text"}
 
 
 class DB(object):
@@ -88,10 +88,12 @@ class DB(object):
         return dict_list[0]
 
 
-    def add_dict(self, data:dict):
+    def add_dict(self, data:dict)-> dict:
         """追加するデータをdictionaryで受け取る
         
         引数 (self,追加したいデータ:dict)
+
+        return 追加したデータ
 
         dictの要素の過不足はDEFAULTが補正してくれる
         """
@@ -108,7 +110,8 @@ class DB(object):
         if not re.match(r'^\d{4}/\d{2}/\d{2} \d{1,2}:\d{2}$', newdata["limit_at"]):
             newdata["limit_at"] = DEFAULT["limit_at"]
         # 現在時刻取得
-        update_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        update_at = datetime.datetime.now().strftime('%Y/%m/%d %H:%M')
+        newdata["update_at"] = update_at
         # sql文を作文
         msg1 = "insert into todo ("
         msg2 = "values("
@@ -125,6 +128,7 @@ class DB(object):
         sql = msg1+msg2
         self.__c.execute(sql, datalist)
         self.__conn.commit()
+        return newdata
 
 
     def change_id(self, id, column, value):

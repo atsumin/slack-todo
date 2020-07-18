@@ -6,24 +6,27 @@ import datetime
 
 @respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
 def todo_add(message, title, limit_at):
+    # ユーザー情報取得
+    info=tools.getmsginfo(message)
+    data= {"title": title, "limit_at": limit_at,"user": info["user_id"]}
     database = DB(os.environ['TODO_DB'])
     now = datetime.datetime.now()
     limit_at_fin = tools.datetrans(limit_at, now)
-    status = '未'
-    if limit_at_fin == None:
-        database.add_dict(
-            {"title": title, "limit_at": limit_at, "status": status, "noticetime":3})
-        msg = "以下の内容で追加しました。\ntitle:" + title + \
-            "\nlimit:" + limit_at + "\nstatus:" + status
-    else:
+    msg="以下の内容で"
+    if limit_at_fin != None:
         limit_at_format = datetime.datetime.strptime(limit_at_fin, '%Y/%m/%d %H:%M')
         if now > limit_at_format:
-            status = '期限切れ'
+            data["status"] = '期限切れ'
         noticetime = tools.noticetimeSet(limit_at_format, now)
-        database.add_dict(
-            {"title": title, "limit_at": limit_at_fin, "status": status, "noticetime":noticetime})
-        msg = "以下の内容で、期限を正しく設定して追加しました。\ntitle:" + title + \
-            "\nlimit:" + limit_at_fin + "\nstatus:" + status
+        data["noticetime"]=noticetime
+        data["limit_at"]=limit_at_fin
+        msg += "、期限を正しく設定して"
+    data = database.add_dict(data)
+    msg += "追加しました。"
+    for item in data.items():
+        if item[0]=="user":
+            continue
+        msg+=f"\n{item[0]}: {item[1]}"
     message.reply(msg)
 
 @respond_to(r'\s+todo\s+add\s+(\S+)$')
