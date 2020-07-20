@@ -194,3 +194,10 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
         return msg
     return "何らかの不具合により追加できません。"
         
+@respond_to(r'\s+todo\s+help$')
+def todo_help(message):
+    correctness = True
+    msg = '使用可能なコマンド\n'\
+    message.reply(msg)
+
+
