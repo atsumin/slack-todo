@@ -30,3 +30,7 @@ def com_set(message):
 @listen_to('what')
 def listen_what(message):
     message.reply('??')
+
+@listen_to('app')
+def listen_help(message):
+    message.reply('このアプリはtodo管理アプリです')
