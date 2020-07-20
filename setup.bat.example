@@ -1,3 +1,4 @@
 set API_TOKEN={API Token for your Slack bots app}
 set TODO_DB=todo.db
 set SLACK_CHANNEL={Bot Channel}
+

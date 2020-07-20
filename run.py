@@ -8,9 +8,12 @@ channel = os.environ['SLACK_CHANNEL']
 slack.chat.post_message(channel, 'new version bot is deployed.', as_user=True)
 
 dbname = os.environ['TODO_DB']
-db = DB(dbname)
+
 if not os.path.exists(dbname):
+    db = DB(dbname)
     db.init()
+else:
+    db = DB(dbname)
 
 mybot = Bot()
 mybot.run()
