@@ -62,6 +62,31 @@ def todo_cancel_announcement(message, id):
 def todo_add(message, title, limit_at):
     data={"title": title,"limit_at": limit_at}
     msg=todo_add_sub(message,data)
+correctness = False
+@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
+def todo_add(message, title, limit_at):
+    # ユーザー情報取得
+    correctness = True
+    info=tools.getmsginfo(message)
+    data= {"title": title, "limit_at": limit_at,"user": info["user_id"]}
+    database = DB(os.environ['TODO_DB'])
+    now = datetime.datetime.now()
+    limit_at_fin = tools.datetrans(limit_at, now)
+    msg="以下の内容で"
+    if limit_at_fin != None:
+        limit_at_format = datetime.datetime.strptime(limit_at_fin, '%Y/%m/%d %H:%M')
+        if now > limit_at_format:
+            data["status"] = '期限切れ'
+        noticetime = tools.noticetimeSet(limit_at_format, now)
+        data["noticetime"]=noticetime
+        data["limit_at"]=limit_at_fin
+        msg += "、期限を正しく設定して"
+    data = database.add_dict(data)
+    msg += "追加しました。"
+    for item in data.items():
+        if item[0]=="user":
+            continue
+        msg+=f"\n{item[0]}: {item[1]}"
     message.reply(msg)
 
 @respond_to(r'\s+todo\s+add\s+(\S+)$')
@@ -93,6 +118,7 @@ def todo_finish(message, id):
 
 @respond_to(r'\s+todo\s+list$')
 def todo_list(message):
+    correctness = True
     database = DB(os.environ['TODO_DB'])
     userId = tools.getmsginfo(message)['user_id']
     data = database.search('user', userId, mode=1)
@@ -109,12 +135,14 @@ def todo_list_all(message):
 
 @respond_to(r'\s+todo\s+reset$')
 def todo_reset(message):
+    correctness = True
     database = DB(os.environ['TODO_DB'])
     database.reset()
     message.reply('データベースを初期化しました')
 
 @respond_to(r'\s+todo\s+search\s+(\S+)$')
 def todo_search(message, text):
+    correctness = True
     msg = ''
     num = 0
     database = DB(os.environ['TODO_DB'])
@@ -130,6 +158,7 @@ def todo_search(message, text):
 
 @respond_to(r'\s*todo\s+change\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_change_id(message, id, column, value):
+    correctness = True
     database = DB(os.environ['TODO_DB'])
     status_code = database.change_id(id, column, value)
     msg = ''
@@ -195,7 +224,8 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
     return "何らかの不具合により追加できません。"
         
 @respond_to(r'\s+todo\s+help$')
-def todo_help(message)
+def todo_help(message):
+    correctness = True
     msg = '使用可能なコマンド\n'\
     '・todo add (タスク名) [締切日]\n　タスクを登録します'\
     '・todo list\n　登録されたタスクを表示します'\
@@ -206,5 +236,4 @@ def todo_help(message)
     '　第二引数には、締切日を変更したい場合limit_at, 完了・未完了を変更したい場合status, タスク名を変更したい場合titleを入力してください\n'\
     '　タスクのid及びタスク情報の最終更新日を変更することはできません'
     message.reply(msg)
-
 
