@@ -34,8 +34,19 @@ def todo_add_unlimit(message, title):
     database = DB(os.environ['TODO_DB'])
     database.add(title, None)
 
-@respond_to(r'\s+todo\s+list$')
+@respond_to(r'\s*todo\s+list$')
 def todo_list(message):
+    database = DB(os.environ['TODO_DB'])
+    userId = tools.getmsginfo(message)['user_id']
+    data = database.search('user', userId, mode=1)
+    str_list = 'TODO list:\n'
+    for r in data:
+        str_list += ', '.join(map(str, r.values()))
+        str_list += '\n'
+    message.reply(str_list)
+
+@respond_to(r'\s+todo\s+list\s+all$')
+def todo_list_all(message):
     database = DB(os.environ['TODO_DB'])
     message.reply(database.list())
 
