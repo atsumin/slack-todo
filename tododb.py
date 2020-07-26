@@ -11,7 +11,7 @@ DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
 
 
 class DB(object):
-    def __init__(self, name):
+    def __init__(self,name):
         self.__conn = sqlite3.connect(name)
         self.__c = self.__conn.cursor()
 
@@ -149,6 +149,13 @@ class DB(object):
         datalist.append(newdata["update_at"])
         sql = msg1+msg2
         self.__c.execute(sql, datalist)
+        self.__conn.commit()
+        return newdata
+    
+    def add(self, title, limit_at, careful):
+        update_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        sql = "insert into todo (title, limit_at, update_at, careful) values (?, ?, ?, ?)"
+        self.__c.execute(sql, [title, limit_at, update_at, careful])
         self.__conn.commit()
         return newdata
 
