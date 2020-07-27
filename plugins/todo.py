@@ -227,13 +227,13 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
 def todo_help(message):
     correctness = True
     msg = '使用可能なコマンド\n'\
-    '・todo add (タスク名) [締切日]\n　タスクを登録します'\
-    '・todo list\n　登録されたタスクを表示します'\
-    '・todo reset\n　データを初期化します'\
-    '・todo search\n　入力に一致するタスク名を持つタスクを検索します。そのタスクの状態、期限、idが表示されます'\
+    '・todo add (タスク名) [締切日]\n　タスクを登録します\n'\
+    '・todo list\n　登録されたタスクを表示します\n'\
+    '・todo reset\n　データを初期化します\n'\
+    '・todo search(文字列)\n　入力に一致するタスク名を持つタスクを検索します。そのタスクの状態、期限、idが表示されます\n'\
     '・todo change (タスクのid) (limit_at|status|title) (変更後の値)\n'\
     '　登録したタスクの情報を変更します。\n'\
     '　第二引数には、締切日を変更したい場合limit_at, 完了・未完了を変更したい場合status, タスク名を変更したい場合titleを入力してください\n'\
-    '　タスクのid及びタスク情報の最終更新日を変更することはできません'
+    '　タスクのid及びタスク情報の最終更新日を変更することはできません\n'
     message.reply(msg)
 
