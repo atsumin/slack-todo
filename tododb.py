@@ -131,13 +131,13 @@ class DB(object):
         return newdata
 
 
-    def change_id(self, id, column, value):
+    def change_id(self, id, column, value) -> int:
         """idを指定してcolumnの値をvalueに変更
 
         columnが不正の時 400, idが不正の時 401, 
-        sql文が正常に実行できなかった時 402, columnがlimit_atで不正な値の時 403, columnにidまたはupdate_atを指定した時 404
+        sql文が正常に実行できなかった時 402, columnがlimit_atで不正な値の時 403, columnにidまたはupdate_atを指定した時 404, 
         正常に処理が完了した時 200 を返す
-        ただし, カラムが不正な場合, idについては調べないので両方が不正な場合は400を返す 
+        ただしcolumnが不正な場合, idについては調べないので両方が不正な場合は400を返す 
         """
         status_code = 400
         keys = DEFAULT.keys()
@@ -229,18 +229,23 @@ class DB(object):
         return dict_list
 
 
-    def search(self, column, text):
+    def search(self, column, text, mode=0) ->list:
         """columnの値にtextが含まれる場合そのデータをlist形式(要素はdict形式)で返す
 
         マッチするものがない場合、空のリストで返す
+        mode=0の時, 検索モード, mode=1の時, 完全一致モード
         """
         matched = []
         dict_list = self.dict_list()
         text_compile = re.compile(text)
         for dict in dict_list:
             value = dict[column]
-            if text_compile.search(value):
-                matched.append(dict)
+            if mode == 0:
+                if text_compile.search(value):
+                    matched.append(dict)
+            elif mode == 1:
+                if value == text:
+                    matched.append(dict)
         return matched
 
 

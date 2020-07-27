@@ -9,6 +9,7 @@ def com_set(message):
 
     todo_add = re.search(r'^add\s+(\S+)\s+(\S+)$', text)
     todo_list = re.search(r'^list$', text)
+    todo_list_all = re.search(r'^list\s+all$', text)
     todo_reset = re.search(r'^reset$', text)
     todo_search = re.search(r'^search\s+(\S+)$', text)
     todo_change_id = re.search(r'^change\s+(\S+)\s+(\S+)\s+(\S+)$', text)
@@ -17,6 +18,8 @@ def com_set(message):
         todo.todo_add(message, todo_add.group(1), todo_add.group(2))
     elif todo_list:
         todo.todo_list(message)
+    elif todo_list_all:
+        todo.todo_list_all(message)
     elif todo_reset:
         todo.todo_reset(message)
     elif todo_search:
@@ -30,3 +33,7 @@ def com_set(message):
 @listen_to('what')
 def listen_what(message):
     message.reply('??')
+
+@listen_to('app')
+def listen_help(message):
+    message.reply('このアプリはtodo管理アプリです')
