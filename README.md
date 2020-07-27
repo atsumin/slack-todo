@@ -14,7 +14,8 @@ ToDo 管理とその他さまざまな反応をする slackbot
 
 * plugins/todo.py
   - `@bot todo add 'タイトル' [締切]`: ToDo 内容を登録する
-  - `@bot todo list`: ToDo の一覧を表示する
+  - `@bot todo list`: 参照した user の ToDo の一覧を表示する
+  - `@bot todo list all`: ToDo の一覧を表示する
   - `@bot todo reset`: ToDo の DB をリセットする
   - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
 
@@ -28,7 +29,8 @@ ToDo 管理とその他さまざまな反応をする slackbot
 ## ToDo DBの操作関数
 * `add(title, limit_at)`: title と limit_at (有効期限) を登録
 * `add(title)`: title を無期限の有効期限として登録
-* `list()`: ToDo DB のデータを一覧した文字列を返す
+* `list()`: 参照した user の ToDo DB のデータを 一覧して文字列を返す
+* `list_all()`: Todo DB のデータを一覧した文字列を返す
 * `reset()`: ToDo DB の内容を削除し，空のデータベースを作成
 * `add_dict(data)`:列名をkey、データの値をvalueとするdictのデータをToDo DBに登録　#6　に詳細あり
 * `dict_list()`ToDo DB の各データをそれぞれdictにして、dictのリストを返す #6　に詳細あり
