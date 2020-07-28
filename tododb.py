@@ -223,7 +223,9 @@ class DB(object):
             for i in range(len(columns)):
                 data[columns[i][0]] = item[i]
                 i += 1
-            dict_list.append(data)
+            # 削除済みのものはここで排除する
+            if data["deleted"]==0:
+                dict_list.append(data)
         return dict_list
 
 
