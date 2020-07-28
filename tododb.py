@@ -106,6 +106,8 @@ class DB(object):
             if item[0] in newdata.keys():
                 newdata[item[0]] = item[1]
         # ここで、limit_atがちゃんとフォーマットにあっているか見る
+        if newdata["limit_at"]==None:
+            newdata["limit_at"] = DEFAULT["limit_at"]
         if not re.match(r'^\d{4}/\d{2}/\d{2} \d{1,2}:\d{2}$', newdata["limit_at"]):
             newdata["limit_at"] = DEFAULT["limit_at"]
         # 現在時刻取得
