@@ -17,6 +17,8 @@ need_init = not os.path.exists(dbname)
 database = DB(dbname)
 if need_init:
     database.init()
+#列追加、減少を自動反映
+database.clean()
 
 
 def noticeThread():
