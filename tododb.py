@@ -52,7 +52,7 @@ class DB(object):
         
         列を追加した際にアップデートとして用いられる
         """
-        dict_list = self.dict_list()
+        dict_list = self.dict_list(mode=1)
         self.__drop_table()
         self.__create_table()
         for i in range(len(dict_list)):
@@ -209,8 +209,11 @@ class DB(object):
             str_list += '\n'
         return str_list
 
-    def dict_list(self) ->list:
+
+    def dict_list(self,mode=0) ->list:
         """ToDo DB の各データをそれぞれdictにして、dictのリストを返す
+
+        引数でmode=1とすると、削除されたデータを含めて取得
 
         戻り値の形
         [{データ1 dict},{データ2 dict},{データ3 dict}]
@@ -223,8 +226,14 @@ class DB(object):
             for i in range(len(columns)):
                 data[columns[i][0]] = item[i]
                 i += 1
-            # 削除済みのものはここで排除する
-            if data["deleted"]==0:
+            # 削除済みのものはここで排除する。またint型に直すものを直す
+            data["id"]=int(data["id"])
+            data["noticetime"]=int(data["noticetime"])
+            if "deleted" in data.keys():
+                data["deleted"]=int(data["deleted"])
+                if mode==1 or data["deleted"]==0:
+                    dict_list.append(data)
+            else:
                 dict_list.append(data)
         return dict_list
 
