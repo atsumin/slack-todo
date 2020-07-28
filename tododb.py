@@ -5,9 +5,9 @@ import time
 from plugins import tools
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
-           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None}
+           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0}
 DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
-                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text"}
+                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text", "deleted":"bit"}
 
 
 class DB(object):
@@ -50,17 +50,16 @@ class DB(object):
 
         このとき、テーブル内のデータは保たれる
         
-        idの値がとびとびになってしまった際や列を追加した際にアップデートとして用いられる
+        列を追加した際にアップデートとして用いられる
         """
         dict_list = self.dict_list()
         self.__drop_table()
         self.__create_table()
         for i in range(len(dict_list)):
-            # 本来ないはずだが不正なデータは追加しない
+            # 本来ないはずだが不正なデータは削除データとして追加
             if dict_list[i]["title"] == None or dict_list[i]["title"] == "None":
-                continue
-            if dict_list[i]["update_at"] == None or dict_list[i]["update_at"] == "None":
-                continue
+                dict_list[i]["deleted"]=1
+                dict_list[i]["limit_at"]=DEFAULT["limit_at"]
             self.add_dict(dict_list[i])
 
 
