@@ -215,16 +215,13 @@ class DB(object):
         """
         dict_list = []
         columns = self.__conn.execute("select * from todo").description
-        for i in range(20):
-            fromnum = i*50+1
-            tonum = (i+1)*50
-            for r in self.__c.execute(f"select * from todo WHERE id BETWEEN {fromnum} and {tonum}"):
-                item = list(map(str, r))
-                data = {}
-                for i in range(len(columns)):
-                    data[columns[i][0]] = item[i]
-                    i += 1
-                dict_list.append(data)
+        for r in self.__c.execute(f"select * from todo"):
+            item = list(map(str, r))
+            data = {}
+            for i in range(len(columns)):
+                data[columns[i][0]] = item[i]
+                i += 1
+            dict_list.append(data)
         return dict_list
 
 
