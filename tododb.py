@@ -5,9 +5,9 @@ import time
 from plugins import tools
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
-           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None}
+           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0}
 DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
-                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text"}
+                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text", "deleted":"bit"}
 
 
 class DB(object):
@@ -50,17 +50,16 @@ class DB(object):
 
         このとき、テーブル内のデータは保たれる
         
-        idの値がとびとびになってしまった際や列を追加した際にアップデートとして用いられる
+        列を追加した際にアップデートとして用いられる
         """
-        dict_list = self.dict_list()
+        dict_list = self.dict_list(mode=1)
         self.__drop_table()
         self.__create_table()
         for i in range(len(dict_list)):
-            # 本来ないはずだが不正なデータは追加しない
+            # 本来ないはずだが不正なデータは削除データとして追加
             if dict_list[i]["title"] == None or dict_list[i]["title"] == "None":
-                continue
-            if dict_list[i]["update_at"] == None or dict_list[i]["update_at"] == "None":
-                continue
+                dict_list[i]["deleted"]=1
+                dict_list[i]["limit_at"]=DEFAULT["limit_at"]
             self.add_dict(dict_list[i])
 
 
@@ -107,6 +106,8 @@ class DB(object):
             if item[0] in newdata.keys():
                 newdata[item[0]] = item[1]
         # ここで、limit_atがちゃんとフォーマットにあっているか見る
+        if newdata["limit_at"]==None:
+            newdata["limit_at"] = DEFAULT["limit_at"]
         if not re.match(r'^\d{4}/\d{2}/\d{2} \d{1,2}:\d{2}$', newdata["limit_at"]):
             newdata["limit_at"] = DEFAULT["limit_at"]
         # 現在時刻取得
@@ -208,23 +209,31 @@ class DB(object):
             str_list += '\n'
         return str_list
 
-    def dict_list(self) ->list:
+
+    def dict_list(self,mode=0) ->list:
         """ToDo DB の各データをそれぞれdictにして、dictのリストを返す
+
+        引数でmode=1とすると、削除されたデータを含めて取得
 
         戻り値の形
         [{データ1 dict},{データ2 dict},{データ3 dict}]
         """
         dict_list = []
         columns = self.__conn.execute("select * from todo").description
-        for i in range(20):
-            fromnum = i*50+1
-            tonum = (i+1)*50
-            for r in self.__c.execute(f"select * from todo WHERE id BETWEEN {fromnum} and {tonum}"):
-                item = list(map(str, r))
-                data = {}
-                for i in range(len(columns)):
-                    data[columns[i][0]] = item[i]
-                    i += 1
+        for r in self.__c.execute(f"select * from todo"):
+            item = list(map(str, r))
+            data = {}
+            for i in range(len(columns)):
+                data[columns[i][0]] = item[i]
+                i += 1
+            # 削除済みのものはここで排除する。またint型に直すものを直す
+            data["id"]=int(data["id"])
+            data["noticetime"]=int(data["noticetime"])
+            if "deleted" in data.keys():
+                data["deleted"]=int(data["deleted"])
+                if mode==1 or data["deleted"]==0:
+                    dict_list.append(data)
+            else:
                 dict_list.append(data)
         return dict_list
 
