@@ -236,6 +236,28 @@ class DB(object):
             else:
                 dict_list.append(data)
         return dict_list
+    
+    def dict_list_sorted(self, keycolumn="limit_at",show_over_deadline=0, showdeleted=0, user_id=None) ->list:
+        """ToDo DB の各データをそれぞれdictにして、dictのリストを返す
+        
+        全データ期限の早い順に並び変えられている。
+
+        引数でkeycolumn= 列の名前 とすると、指定した列でソート（基本はlimit_at用なので、それ以外は対応していない可能性あり）
+        
+        引数でshowdeleted=1 とすると、削除されたデータを含めて取得
+
+        引数でshow_over_deadline=0 とすると、期限切れのものを含めて取得
+
+        引数でuser_id= ユーザーのid とすると、特定ユーザーのデータのみ取得
+
+        戻り値の形
+        [{データ1 dict},{データ2 dict},{データ3 dict}]
+        """
+
+        dict_list=self.dict_list(mode=showdeleted)
+        data_sorted = sorted(dict_list, key=lambda x: x[keycolumn])
+
+        return data_sorted
 
 
     def search(self, column, text, mode=0) ->list:
