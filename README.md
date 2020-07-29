@@ -16,14 +16,15 @@ ToDo 管理とその他さまざまな反応をする slackbot
   - `@bot todo add 'タイトル' [締切]`: ToDo 内容を登録する
   - `@bot todo list`: 参照した user の ToDo の一覧を表示する
   - `@bot todo list all`: ToDo の一覧を表示する
+  - `@bot todo delete 'id'`: 指定したidを削除する
   - `@bot todo reset`: ToDo の DB をリセットする
   - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
 
 ## ToDo DBのスキーマ
-| id | title |     limit_at     |    update_at     | status |  noticetime  |    user     |
-|----|-------|------------------|------------------|--------|--------------|-------------|
-|  1 | test1 | 2020/04/30 23:59 | 2020/04/01 13:10 |   済   |       0      | S2340A7K6Q4 |
-|  2 | test2 | 2020/07/30 7:05  | 2020/06/01 17:00 |   未   |       3      | S2340A7K6Q4 |
+| id | title |     limit_at     |    update_at     | status |  noticetime  |    user     | deleted |
+|----|-------|------------------|------------------|--------|--------------|-------------|---------|
+|  1 | test1 | 2020/04/30 23:59 | 2020/04/01 13:10 |   済   |       0      | S2340A7K6Q4 |    0    |
+|  2 | test2 | 2020/07/30 7:05  | 2020/06/01 17:00 |   未   |       3      | S2340A7K6Q4 |    1    |
 * 上のuseridは存在しないものである
 
 ## ToDo DBの操作関数
@@ -38,6 +39,7 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * `clean()`主に開発時、テーブルの列の更新、不正なデータの削除を行う
 * `change_id(id, column, value)`指定したidのデータの値を変更する
 * `search(column, text)`columnの値にtextが含まれる場合そのデータをlist形式(要素はdict形式)で返す
+* `delete_id(id, userid)`指定したデータを削除する。他のユーザのものは消せない。
 
 ## 諸機能の補助関数(tools.py)
 * `getmsginfo(message)`:messageからユーザー情報を取得
