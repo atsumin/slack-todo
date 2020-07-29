@@ -115,11 +115,12 @@ def postMessage(text, attachments:list, channel="bot-test", username="お知ら�
         'Content-Type': 'application/json; charset=utf-8'
     }
     data = {
-        "channel":channel,
-        "username":username,
-        "text":text,
-        "attachments":attachments,
-        "icon_emoji":icon_emoji
+        "channel": channel,
+        "username": username,
+        "text": text,
+        "attachments": attachments,
+        "icon_emoji": icon_emoji,
+        "as_user": True
     }
     url = 'https://slack.com/api/chat.postMessage'
     r_post = requests.post(url, headers=headers, json=data)
@@ -133,12 +134,12 @@ def updateMessage(text, attachments:list, ts, channel, username="お知らせ", 
         'Content-Type': 'application/json; charset=utf-8'
     }
     data = {
-        "channel":channel,
-        "username":username,
-        "text":text,
-        "attachments":attachments,
-        "icon_emoji":icon_emoji,
-        "ts":ts
+        "channel": channel,
+        "username": username,
+        "text": text,
+        "attachments": attachments,
+        "icon_emoji": icon_emoji,
+        "ts": ts
     }
     url = 'https://slack.com/api/chat.update'
     r_post = requests.post(url, headers=headers, json=data)
