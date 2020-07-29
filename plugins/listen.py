@@ -8,6 +8,7 @@ def com_set(message):
     text = message.body['text'][1:]
 
     todo_add = re.search(r'^add\s+(\S+)\s+(\S+)$', text)
+    todo_delete = re.search(r'^delete\s+(\d+)$', text)
     todo_list = re.search(r'^list$', text)
     todo_list_all = re.search(r'^list\s+all$', text)
     todo_reset = re.search(r'^reset$', text)
@@ -16,6 +17,8 @@ def com_set(message):
 
     if todo_add:
         todo.todo_add(message, todo_add.group(1), todo_add.group(2))
+    elif todo_delete:
+        todo.todo_delete(message,todo_delete.group(1))
     elif todo_list:
         todo.todo_list(message)
     elif todo_list_all:

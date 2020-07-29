@@ -62,6 +62,16 @@ class DB(object):
                 dict_list[i]["limit_at"]=DEFAULT["limit_at"]
             self.add_dict(dict_list[i])
 
+    def delete_id(self, id: str, userid) -> int:
+        """指定したidのデータを削除する
+
+        ユーザーに権限がない場合は-1を返す
+        """
+        if self.select_id(id)["user"]==userid:
+            result = self.change_id(id, "deleted", 1)
+        else:
+            result = -1
+        return result
 
 
     def select_id(self, id: str) -> dict:

@@ -4,6 +4,24 @@ from . import tools
 import os
 import datetime
 
+@respond_to(r'\s*todo\s+delete\s+(\d+)$')
+def todo_delete(message, id):
+    db = DB(os.environ['TODO_DB'])
+    userid = tools.getmsginfo(message)["user_id"]
+    result = db.delete_id(id, userid)
+    if result==200:
+        msg = f"id{id}番を削除しました。"
+    elif result==401:
+        msg = f"idが不正です。"
+    elif result==402:
+        msg = f"sql文が上手く実行できませんでした。"
+    elif result==-1:
+        msg = f"他のユーザーのものは変更できません。"
+    else:
+        msg = "うまくいきませんでした。"
+    message.reply(msg)
+
+
 @respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
 def todo_add(message, title, limit_at):
     # ユーザー情報取得
