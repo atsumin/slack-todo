@@ -59,13 +59,13 @@ class Notice():
                                 "type":"section",
                                 "text":{
                                     "type":"mrkdwn",
-                                    "text": '*'+ dict["title"] + '*\n' + '期限：' + dict["limit_at"] + '\nid：' + dict["id"]
+                                    "text": '*'+ dict["title"] + '*\n' + '期限：' + dict["limit_at"] + '\nid：' + str(dict["id"])
                                 }
                             }
                         ]
                     }
                 ] 
-                tools.postMessage(text, attachments, channel=self.channel, icon_emoji=":panda_face:")
+                tools.postMessage(text, attachments, channel=dict['user'], icon_emoji=":panda_face:")
                 db.change_id(dict['id'], 'noticetime', noticetime)
 
 

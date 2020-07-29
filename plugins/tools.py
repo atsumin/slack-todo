@@ -62,9 +62,12 @@ def datetrans(limit_at, now, mode=0):
         year_judge = True
     elif length <= 2:
         # 2文字以下ならlimit_at日後
-        l = now + datetime.timedelta(days=int(limit_at))
-        limit_at_str = l.strftime(date_format)
-        limit_at_str = limit_at_str[:-4] + '2359'
+        try:
+            l = now + datetime.timedelta(days=int(limit_at))
+            limit_at_str = l.strftime(date_format)
+            limit_at_str = limit_at_str[:-4] + '2359'
+        except:
+            return None
 
     if mode == 1:
         year_judge = False
@@ -112,11 +115,12 @@ def postMessage(text, attachments:list, channel="bot-test", username="お知ら�
         'Content-Type': 'application/json; charset=utf-8'
     }
     data = {
-        "channel":channel,
-        "username":username,
-        "text":text,
-        "attachments":attachments,
-        "icon_emoji":icon_emoji
+        "channel": channel,
+        "username": username,
+        "text": text,
+        "attachments": attachments,
+        "icon_emoji": icon_emoji,
+        "as_user": True
     }
     url = 'https://slack.com/api/chat.postMessage'
     r_post = requests.post(url, headers=headers, json=data)
@@ -130,12 +134,12 @@ def updateMessage(text, attachments:list, ts, channel, username="お知らせ", 
         'Content-Type': 'application/json; charset=utf-8'
     }
     data = {
-        "channel":channel,
-        "username":username,
-        "text":text,
-        "attachments":attachments,
-        "icon_emoji":icon_emoji,
-        "ts":ts
+        "channel": channel,
+        "username": username,
+        "text": text,
+        "attachments": attachments,
+        "icon_emoji": icon_emoji,
+        "ts": ts
     }
     url = 'https://slack.com/api/chat.update'
     r_post = requests.post(url, headers=headers, json=data)
