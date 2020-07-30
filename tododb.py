@@ -60,7 +60,7 @@ class DB(object):
             if dict_list[i]["title"] == None or dict_list[i]["title"] == "None":
                 dict_list[i]["deleted"]=1
                 dict_list[i]["limit_at"]=DEFAULT["limit_at"]
-            self.add_dict(dict_list[i])
+            self.add_dict(dict_list[i], update_update_at = 0)
 
     def delete_id(self, id: str, userid) -> int:
         """指定したidのデータを削除する
@@ -97,7 +97,7 @@ class DB(object):
         return dict_list[0]
 
 
-    def add_dict(self, data:dict)-> dict:
+    def add_dict(self, data:dict, update_update_at=1)-> dict:
         """追加するデータをdictionaryで受け取る
 
         引数 (self,追加したいデータ:dict)
@@ -122,7 +122,9 @@ class DB(object):
             newdata["limit_at"] = DEFAULT["limit_at"]
         # 現在時刻取得
         update_at = datetime.datetime.now().strftime('%Y/%m/%d %H:%M')
-        newdata["update_at"] = update_at
+        # update_update_atによってupdate_atを更新するか決める
+        if update_update_at == 1:
+            newdata["update_at"] = update_at
         # sql文を作文
         msg1 = "insert into todo ("
         msg2 = "values("
@@ -135,7 +137,7 @@ class DB(object):
             datalist.append(newdata[tag])
         msg1 += "update_at)"
         msg2 += "?)"
-        datalist.append(update_at)
+        datalist.append(newdata["update_at"])
         sql = msg1+msg2
         self.__c.execute(sql, datalist)
         self.__conn.commit()
