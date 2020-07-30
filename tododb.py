@@ -155,7 +155,7 @@ class DB(object):
         status_code = 400
         keys = DEFAULT.keys()
         now = datetime.datetime.now()
-        now_f = str(now)[0:19]
+        now_f = datetime.datetime.now().strftime('%Y/%m/%d %H:%M')
         if column == 'id' or column == 'update_at':
             status_code = 404
             return status_code
