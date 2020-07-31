@@ -14,6 +14,7 @@ def com_set(message):
     todo_reset = re.search(r'^reset$', text)
     todo_search = re.search(r'^search\s+(\S+)$', text)
     todo_change_id = re.search(r'^change\s+(\S+)\s+(\S+)\s+(\S+)$', text)
+    todo_announce = re.search(r'^announce\s+(\S+)\s+(\S+)\s+(\S+)$', text)
 
     if todo_add:
         todo.todo_add(message, todo_add.group(1), todo_add.group(2))
@@ -30,6 +31,8 @@ def com_set(message):
     elif todo_change_id: 
         todo.todo_change_id(message, todo_change_id.group(1), \
             todo_change_id.group(2), todo_change_id.group(3))
+    elif todo_announce:
+        todo.todo_announce(message, todo_announce.group(1), todo_announce.group(2), todo_announce.group(3))
     else:
         message.reply('このコマンドは無効です')
 
