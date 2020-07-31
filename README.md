@@ -17,14 +17,24 @@ ToDo 管理とその他さまざまな反応をする slackbot
   - `@bot todo list`: 参照した user の ToDo の一覧を表示する
   - `@bot todo list all`: ToDo の一覧を表示する
   - `@bot todo delete 'id'`: 指定したidを削除する
+  - `@bot todo delete_secret 'id'`: 指定したidを削除し、その内容も初期化する
+  - `@bot todo cancel_announcement 'id'`: 指定した全体への告知を削除する
+  - `@bot todo announce 'タイトル' '日時' '備考'`: 全員共通のことについて、全体への告知を作成する
   - `@bot todo reset`: ToDo の DB をリセットする
   - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
 
 ## ToDo DBのスキーマ
-| id | title |     limit_at     |    update_at     | status |  noticetime  |    user     | deleted |
-|----|-------|------------------|------------------|--------|--------------|-------------|---------|
-|  1 | test1 | 2020/04/30 23:59 | 2020/04/01 13:10 |   済   |       0      | S2340A7K6Q4 |    0    |
-|  2 | test2 | 2020/07/30 7:05  | 2020/06/01 17:00 |   未   |       3      | S2340A7K6Q4 |    1    |
+|id|title|    limit_at    |   update_at    |status|noticetime|   user    |deleted|
+|--|-----|----------------|----------------|------|----------|-----------|-------|
+| 1|test1|2020/04/30 23:59|2020/04/01 13:10|  済  |     0    |S2340A7K6Q4|   0   |
+| 2|test2|2020/07/30 7:05 |2020/06/01 17:00|  未  |     3    |S2340A7K6Q4|   1   |
+
+多くなったので入りきらないが、以下は上のテーブルの右につながる。
+|subject|note|importance|
+|-------|----|----------|
+|science|None|    中    |
+| None  | あ |    大    |
+
 * 上のuseridは存在しないものである
 
 ## ToDo DBの操作関数
@@ -49,6 +59,7 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * `postMessage(text, attachments, channel, username="お知らせ", icon_emoji)`:messageをpost
 * `updateMessage(text, attachments, ts, channel, username="お知らせ", icon_emoji)`:messageを編集
 * `noticetimeSet(limit_at:datetime, now)`:期限から残り通知回数を定める
+* `order(data,column)`:データ列のソートの順序を定めるする
 
 ## テスト用プログラム
 * test_regex.py
