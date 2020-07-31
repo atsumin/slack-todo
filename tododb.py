@@ -5,9 +5,9 @@ import time
 from plugins import tools
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
-           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0}
+           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0, "subject": None,"note": None,"importance": "中"}
 DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
-                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text", "deleted":"bit"}
+                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text", "deleted":"bit", "subject": "text","note": "text","importance": "text NOT NULL"}
 
 
 class DB(object):
