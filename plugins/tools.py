@@ -162,3 +162,28 @@ def noticetimeSet(limit_at:datetime, now):
     elif diff < datetime.timedelta(days=3):
         noticetime = 2
     return noticetime
+
+def order(data: str,column: str):
+    """データの順序を定める。
+    
+    大小比較によるソートに利用される。
+    
+    """
+    if column == "importance":
+        if data == "大":
+            return 1
+        if data == "中":
+            return 2
+        if data == "小":
+            return 3
+        return 0
+    if column == "status":
+        if data == "未":
+            return 1
+        if data == "期限切れ":
+            return 2
+        if data == "済":
+            return 3
+        return 0
+    return data
+    

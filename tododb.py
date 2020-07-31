@@ -278,7 +278,7 @@ class DB(object):
         """
 
         dict_list=self.dict_list(mode=showdeleted, show_over_deadline=show_over_deadline, user_id=user_id)
-        data_sorted = sorted(dict_list, key=lambda x: x[keycolumn])
+        data_sorted = sorted(dict_list, key=lambda x: tools.order(x[keycolumn],keycolumn))
 
         return data_sorted
 
