@@ -62,13 +62,22 @@ class DB(object):
                 dict_list[i]["limit_at"]=DEFAULT["limit_at"]
             self.add_dict(dict_list[i], update_update_at = 0)
 
-    def delete_id(self, id: str, userid) -> int:
+    def delete_id(self, id: str, userid: str, secret = False) -> int:
         """指定したidのデータを削除する
 
         ユーザーに権限がない場合は-1を返す
+
+        オプションで内容も初期化することが出来る。
         """
         if self.select_id(id)["user"]==userid:
             result = self.change_id(id, "deleted", 1)
+            if result == 200 and secret:
+                for key, value in DEFAULT.items():
+                    if key=="deleted" or key=="id" or key=="update_at" or key=="user":
+                        continue
+                    result = self.change_id(id, key, value)
+                    if result != 200:
+                        break
         else:
             result = -1
         return result
