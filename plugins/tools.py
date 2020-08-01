@@ -4,6 +4,7 @@ import requests
 import json
 import re
 from dateutil.relativedelta import relativedelta
+import mojimoji
 
 
 # 今後誰かが取得したくなった時の参考にchannel名、相手の名前等を取得する方法を載せておく
@@ -34,6 +35,7 @@ def getmsginfo(message)-> dict:
 def datetrans(limit_at, now, mode=0):
     #　例で2020年8月16日19時18分のコマンドを記述しておく
     limit_at_str = ''
+    limit_at = mojimoji.zen_to_han(limit_at, kana=False, ascii=False)
     date_format = "%Y%m%d%H%M"
     limit_at = limit_at.replace("/","")
     limit_at = limit_at.replace(":","")
@@ -115,7 +117,7 @@ def autostatus(assignment, now, mode=0):
     return status
 
 # messageをpost
-def postMessage(text, attachments:list, channel="bot-test", username="お知らせ", icon_emoji=":snake:"):
+def postMessage(text, attachments:list, channel="bot-test", username="お知らせ", icon_emoji=":snake:", as_user=False):
     headers = {
         'Authorization': 'Bearer '+os.environ['API_TOKEN'],
         'Content-Type': 'application/json; charset=utf-8'
@@ -126,7 +128,7 @@ def postMessage(text, attachments:list, channel="bot-test", username="お知ら�
         "text": text,
         "attachments": attachments,
         "icon_emoji": icon_emoji,
-        "as_user": True
+        "as_user": as_user
     }
     url = 'https://slack.com/api/chat.postMessage'
     r_post = requests.post(url, headers=headers, json=data)
