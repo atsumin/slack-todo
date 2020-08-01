@@ -171,14 +171,13 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
             msg+=f"\n{item[0]}: {item[1]}"
         return msg
     if "status" in data.keys():
-        if data["status"]=="済":
-            data["noticetime"]=3
-            data = database.add_dict(data)
-            msg="以下の内容で追加しました。\n"
-            for item in data.items():
-                if item[0]=="user":
-                    continue
-                msg+=f"\n{item[0]}: {item[1]}"
-            return msg
+        data["noticetime"]=3
+        data = database.add_dict(data)
+        msg="以下の内容で追加しました。\n"
+        for item in data.items():
+            if item[0]=="user":
+                continue
+            msg+=f"\n{item[0]}: {item[1]}"
+        return msg
     return "何らかの不具合により追加できません。"
         
