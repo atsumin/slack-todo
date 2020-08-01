@@ -5,9 +5,9 @@ import time
 from plugins import tools
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
-           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0}
+           "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0, "subject": None,"note": None,"importance": "中"}
 DEFAULT_TYPE = {"title": "text NOT NULL", "limit_at": "text",
-                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text", "deleted":"bit"}
+                "update_at": "text NOT NULL", "status": "text", "noticetime": "integer NOT NULL", "user": "text", "deleted":"bit", "subject": "text","note": "text","importance": "text NOT NULL"}
 
 
 class DB(object):
@@ -62,13 +62,22 @@ class DB(object):
                 dict_list[i]["limit_at"]=DEFAULT["limit_at"]
             self.add_dict(dict_list[i], update_update_at = 0)
 
-    def delete_id(self, id: str, userid) -> int:
+    def delete_id(self, id: str, userid: str, secret = False) -> int:
         """指定したidのデータを削除する
 
         ユーザーに権限がない場合は-1を返す
+
+        オプションで内容も初期化することが出来る。
         """
         if self.select_id(id)["user"]==userid:
             result = self.change_id(id, "deleted", 1)
+            if result == 200 and secret:
+                for key, value in DEFAULT.items():
+                    if key=="deleted" or key=="id" or key=="update_at" or key=="user":
+                        continue
+                    result = self.change_id(id, key, value)
+                    if result != 200:
+                        break
         else:
             result = -1
         return result
@@ -278,7 +287,7 @@ class DB(object):
         """
 
         dict_list=self.dict_list(mode=showdeleted, show_over_deadline=show_over_deadline, user_id=user_id)
-        data_sorted = sorted(dict_list, key=lambda x: x[keycolumn])
+        data_sorted = sorted(dict_list, key=lambda x: tools.order(x[keycolumn],keycolumn))
 
         return data_sorted
 

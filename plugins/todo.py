@@ -4,6 +4,24 @@ from . import tools
 import os
 import datetime
 
+@respond_to(r'\s*todo\s+delete_secret\s+(\d+)$')
+def todo_delete_secret(message, id):
+    db = DB(os.environ['TODO_DB'])
+    userid = tools.getmsginfo(message)["user_id"]
+    result = db.delete_id(id, userid,secret=True)
+    if result==200:
+        msg = f"id{id}番を削除しました。また、id{id}番データ内容は初期化されました。"
+    elif result==401:
+        msg = f"idが不正です。"
+    elif result==402:
+        msg = f"sql文が上手く実行できませんでした。"
+    elif result==-1:
+        msg = f"他のユーザーのものは変更できません。"
+    else:
+        msg = "うまくいきませんでした。"
+    message.reply(msg)
+
+
 @respond_to(r'\s*todo\s+delete\s+(\d+)$')
 def todo_delete(message, id):
     db = DB(os.environ['TODO_DB'])
@@ -20,6 +38,24 @@ def todo_delete(message, id):
     else:
         msg = "うまくいきませんでした。"
     message.reply(msg)
+
+
+@respond_to(r'\s*todo\s+cancel\s+announcement\s+(\d+)$')
+def todo_cancel_announcement(message, id):
+    db = DB(os.environ['TODO_DB'])
+    result = db.delete_id(id, "all")
+    if result==200:
+        msg = f"id{id}番のannouncementを削除しました。"
+    elif result==401:
+        msg = f"idが不正です。"
+    elif result==402:
+        msg = f"sql文が上手く実行できませんでした。"
+    elif result==-1:
+        msg = f"指定されたidのデータはannouncementではありません。"
+    else:
+        msg = "うまくいきませんでした。"
+    message.reply(msg)
+
 
 
 @respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
@@ -51,6 +87,29 @@ def todo_add(message, title, limit_at):
 def todo_add_unlimit(message, title):
     database = DB(os.environ['TODO_DB'])
     database.add(title, None)
+
+
+@respond_to(r'todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
+def todo_announce(message, title, limit_at, note):
+    data= {"title": title, "limit_at": limit_at,"user": "all", "note": note}
+    database = DB(os.environ['TODO_DB'])
+    now = datetime.datetime.now()
+    limit_at_fin = tools.datetrans(limit_at, now)
+    msg="以下の内容で"
+    if limit_at_fin != None:
+        limit_at_format = datetime.datetime.strptime(limit_at_fin, '%Y/%m/%d %H:%M')
+        if now > limit_at_format:
+            data["status"] = '期限切れ'
+        noticetime = tools.noticetimeSet(limit_at_format, now)
+        data["noticetime"]=noticetime
+        data["limit_at"]=limit_at_fin
+        msg += "、期限を正しく設定して"
+    data = database.add_dict(data)
+    msg += "追加しました。"
+    for item in data.items():
+        msg+=f"\n{item[0]}: {item[1]}"
+    message.reply(msg)
+
 
 @respond_to(r'\s*todo\s+list$')
 def todo_list(message):
