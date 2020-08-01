@@ -37,6 +37,9 @@ def datetrans(limit_at, now, mode=0):
     limit_at_str = ''
     limit_at = mojimoji.zen_to_han(limit_at, kana=False, ascii=False)
     date_format = "%Y%m%d%H%M"
+    # NoneにはNoneを返す
+    if limit_at==None:
+        return None
     limit_at = limit_at.replace("/","")
     limit_at = limit_at.replace(":","")
     limit_at = limit_at.replace(" ","")
