@@ -115,7 +115,7 @@ def autostatus(assignment, now, mode=0):
     return status
 
 # messageをpost
-def postMessage(text, attachments:list, channel="bot-test", username="お知らせ", icon_emoji=":snake:"):
+def postMessage(text, attachments:list, channel="bot-test", username="お知らせ", icon_emoji=":snake:", as_user=False):
     headers = {
         'Authorization': 'Bearer '+os.environ['API_TOKEN'],
         'Content-Type': 'application/json; charset=utf-8'
@@ -126,7 +126,7 @@ def postMessage(text, attachments:list, channel="bot-test", username="お知ら�
         "text": text,
         "attachments": attachments,
         "icon_emoji": icon_emoji,
-        "as_user": True
+        "as_user": as_user
     }
     url = 'https://slack.com/api/chat.postMessage'
     r_post = requests.post(url, headers=headers, json=data)
