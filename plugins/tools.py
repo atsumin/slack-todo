@@ -4,6 +4,7 @@ import requests
 import json
 import re
 from dateutil.relativedelta import relativedelta
+import mojimoji
 
 
 # 今後誰かが取得したくなった時の参考にchannel名、相手の名前等を取得する方法を載せておく
@@ -34,6 +35,7 @@ def getmsginfo(message)-> dict:
 def datetrans(limit_at, now, mode=0):
     #　例で2020年8月16日19時18分のコマンドを記述しておく
     limit_at_str = ''
+    limit_at = mojimoji.zen_to_han(limit_at, kana=False, ascii=False)
     date_format = "%Y%m%d%H%M"
     limit_at = limit_at.replace("/","")
     limit_at = limit_at.replace(":","")
