@@ -34,6 +34,18 @@ def todo_add_unlimit(message, title):
     database = DB(os.environ['TODO_DB'])
     database.add(title, None)
 
+#titleとlimitに加えてstatusも登録できるようにする
+@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
+def todo_add_status(message, title, limit_at, status):
+    database = DB(os.environ['TODO_DB'])
+    database.add_dict({"title": title, "limit_at": limit_at, "status": status})
+
+#status未のものを済にする
+@respond_to(r'\s+todo\s+add\s+done\s+(\S+)$')
+def todo_add_done(message, done, title):
+    database = DB(os.environ['TODO_DB'])
+    database.change_id(id :int , 'status', '済')
+
 @respond_to(r'\s+todo\s+list$')
 def todo_list(message):
     database = DB(os.environ['TODO_DB'])
