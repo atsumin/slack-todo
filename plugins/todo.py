@@ -66,8 +66,9 @@ def todo_add(message, title, limit_at):
 
 @respond_to(r'\s+todo\s+add\s+(\S+)$')
 def todo_add_unlimit(message, title):
-    database = DB(os.environ['TODO_DB'])
-    database.add(title, None)
+    data={"title": title}
+    msg=todo_add_sub(message,data)
+    message.reply(msg)
 
 
 @respond_to(r'todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
