@@ -64,12 +64,18 @@ def todo_add(message, title, limit_at):
     msg=todo_add_sub(message,data)
     message.reply(msg)
 
+@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(S+)')
+def todo_add_importance(message,title, limit_at, importance):
+    data={"title": title,"limit_at": limit_at, 'importance': importance}
+    msg=todo_add_sub(message,data)
+    message.reply(msg)
+    
+
 @respond_to(r'\s+todo\s+add\s+(\S+)$')
 def todo_add_unlimit(message, title):
     data={"title": title}
     msg=todo_add_sub(message,data)
     message.reply(msg)
-
 
 @respond_to(r'todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_announce(message, title, limit_at, note):

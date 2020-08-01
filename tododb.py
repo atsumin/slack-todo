@@ -1,4 +1,5 @@
 import sqlite3
+
 import datetime
 import re
 import time
@@ -152,10 +153,10 @@ class DB(object):
         self.__conn.commit()
         return newdata
     
-    def add(self, title, limit_at, careful):
+    def add(self, title, limit_at):
         update_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        sql = "insert into todo (title, limit_at, update_at, careful) values (?, ?, ?, ?)"
-        self.__c.execute(sql, [title, limit_at, update_at, careful])
+        sql = "insert into todo (title, limit_at, update_at) values (?, ?, ?)"
+        self.__c.execute(sql, [title, limit_at, update_at])
         self.__conn.commit()
         return newdata
 
