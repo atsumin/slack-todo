@@ -31,13 +31,27 @@ class Notice():
                     db.change_id(dict['id'], 'status', '期限切れ')
             except:
                 break
+            color = ''
+            text = ''
+            post = False
+            # 全体アナウンス
             if dict['user'] == 'all':
-                # 全体への通知処理   channel = self.channel
-                print('全体への通知')
+                if self.__limit_at < self.now + dt.timedelta(hours=1) and noticetime == 1:
+                    text = "期限まであと１時間"
+                    noticetime = 0
+                    color = 'ff4500'
+                    post = True
+                elif self.__limit_at < self.now + dt.timedelta(days=1) and noticetime == 2:
+                    text = "期限まであと１日"
+                    noticetime = 1
+                    color = 'ffff00'
+                    post = True
+                elif self.__limit_at < self.now + dt.timedelta(days=3) and noticetime == 3:
+                    text = "期限まであと３日"
+                    noticetime = 2
+                    color = '7cfc00'
+                    post = True
             else:
-                color = ''
-                text = ''
-                post = False
                 if dict["status"] == '未':                
                     if self.__limit_at < self.now + dt.timedelta(hours=1) and noticetime == 1:
                         text = "期限まであと１時間。ひょっとして提出し忘れてるんじゃ？:face_with_rolling_eyes::face_with_rolling_eyes:"
@@ -54,22 +68,22 @@ class Notice():
                         noticetime = 2
                         color = '7cfc00'
                         post = True
-                if post == True:
-                    attachments = [
-                        {
-                            "color":color,
-                            "blocks":[
-                                {
-                                    "type":"section",
-                                    "text":{
-                                        "type":"mrkdwn",
-                                        "text": '*'+ dict["title"] + '*\n' + '期限：' + dict["limit_at"] + '\nid：' + str(dict["id"])
-                                    }
+            if post == True:
+                attachments = [
+                    {
+                        "color":color,
+                        "blocks":[
+                            {
+                                "type":"section",
+                                "text":{
+                                    "type":"mrkdwn",
+                                    "text": '*'+ dict["title"] + '*\n' + '期限：' + dict["limit_at"] + '\nid：' + str(dict["id"])
                                 }
-                            ]
-                        }
-                    ] 
-                    tools.postMessage(text, attachments, channel=dict['user'], icon_emoji=":panda_face:")
-                    db.change_id(dict['id'], 'noticetime', noticetime)
+                            }
+                        ]
+                    }
+                ] 
+                tools.postMessage(text, attachments, channel=dict['user'], icon_emoji=":panda_face:")
+                db.change_id(dict['id'], 'noticetime', noticetime)
 
 
