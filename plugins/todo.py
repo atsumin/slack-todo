@@ -135,31 +135,26 @@ def todo_list(message):
     database = DB(os.environ['TODO_DB'])
     userId = tools.getmsginfo(message)['user_id']
     data = database.dict_list_sorted(show_over_deadline=3, user_id=userId)
-    num = 0
-    str_list = ''
-    for r in data:
-        num += 1
-        if r["importance"] == '大':
-            #もう少しわかりやすく区別したい
-            if r["subject"] == 'None':
-                str_list += f' _`{r["id"]}`_ _*{r["title"]}*_   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
-            else:
-                str_list += f' _`{r["id"]}`_ _{r["subject"]}_ _*{r["title"]}*_   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
-        else:
-            if r["subject"] == 'None':
-                str_list += f' `{r["id"]}` *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
-            else:
-                str_list += f' `{r["id"]}` {r["subject"]} *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
-    if str_list == '':
-        str_list = '現在のリストにはタスクが存在しません。'
-    else:
-        str_list = f'現在のタスクは以下の{num}件です。\n' + str_list
-    message.reply(str_list)
+    msg = todo_view(data, '未完了の')
+    message.reply(msg)
 
+# 未、済、期限切れ　すべて表示
 @respond_to(r'\s*todo\s+list\s+all$')
 def todo_list_all(message):
     database = DB(os.environ['TODO_DB'])
-    message.reply(database.list())
+    userId = tools.getmsginfo(message)['user_id']
+    data = database.dict_list_sorted(show_over_deadline=0, user_id=userId)
+    msg = todo_view(data, '')
+    message.reply(msg)
+
+# 未、期限切れ　表示
+@respond_to(r'\s*todo\s+list\s+\-1')
+def todo_list_notdone(message):
+    database = DB(os.environ['TODO_DB'])
+    userId = tools.getmsginfo(message)['user_id']
+    data = database.dict_list_sorted(show_over_deadline=2, user_id=userId)
+    msg = todo_view(data, '未完了・期限切れの')
+    message.reply(msg)
 
 @respond_to(r'\s*todo\s+reset$')
 def todo_reset(message):
@@ -178,7 +173,7 @@ def todo_search(message, text):
     else:
         for data in matched:
             num += 1
-            msg += f'\n{data["title"]}, 期限:{data["limit_at"]}, status:{data["status"]}, id:{data["id"]}'
+            msg += f'\n *{data["title"]}*  期限:{data["limit_at"][5:]}  status：*{data["status"]}*  `{data["id"]}`'
         msg = f'一致するassignmentは以下の{num}件です。' + msg
     message.reply(msg)
 
@@ -247,6 +242,30 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
             msg+=f"\n{item[0]}: {item[1]}"
         return msg
     return "何らかの不具合により追加できません。"
+
+def todo_view(data, info_str) -> str:
+    """dict_list()で得たdict型データ(引数data)を見やすい文字列に変換する
+    """
+    num = 0
+    str_list = ''
+    for r in data:
+        num += 1
+        if r["importance"] == '大':
+            #もう少しわかりやすく区別したい
+            if r["subject"] == 'None':
+                str_list += f' _`{r["id"]}`_  _*{r["title"]}*_   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+            else:
+                str_list += f' _`{r["id"]}`_  _{r["subject"]}_ _*{r["title"]}*_   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+        else:
+            if r["subject"] == 'None':
+                str_list += f' `{r["id"]}`  *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+            else:
+                str_list += f' `{r["id"]}` {r["subject"]} *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+    if str_list == '':
+        str_list = f'現在のリストには{info_str}タスクが存在しません。'
+    else:
+        str_list = f'{info_str}タスクは以下の{num}件です。\n' + str_list
+    return str_list
         
 @respond_to(r'\s+todo\s+help$')
 def todo_help(message):

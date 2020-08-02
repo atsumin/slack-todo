@@ -13,11 +13,13 @@ def com_set(message):
     todo_cancel_announcement = re.search(r'^cancel_announcement\s+(\d+)$', text)
     todo_list = re.search(r'^list$', text)
     todo_list_all = re.search(r'^list\s+all$', text)
+    todo_list_notdone = re.search(r'^list\s+\-1', text)
     todo_reset = re.search(r'^reset$', text)
     todo_finish = re.search(r'^finish\s+(.*)', text)
     todo_search = re.search(r'^search\s+(\S+)$', text)
     todo_change_id = re.search(r'^change\s+(\S+)\s+(\S+)\s+(\S+)$', text)
     todo_announce = re.search(r'^announce\s+(\S+)\s+(\S+)\s+(\S+)$', text)
+    todo_help = re.search(r'^help', text)
 
     if todo_add:
         todo.todo_add(message, todo_add.group(1), todo_add.group(2))
@@ -31,6 +33,8 @@ def com_set(message):
         todo.todo_list(message)
     elif todo_list_all:
         todo.todo_list_all(message)
+    elif todo_list_notdone:
+        todo.todo_list_notdone(message)
     elif todo_reset:
         todo.todo_reset(message)
     elif todo_finish:
@@ -42,6 +46,8 @@ def com_set(message):
             todo_change_id.group(2), todo_change_id.group(3))
     elif todo_announce:
         todo.todo_announce(message, todo_announce.group(1), todo_announce.group(2), todo_announce.group(3))
+    elif todo_help:
+        todo.todo_help(message)
     else:
         message.reply('このコマンドは無効です')
 

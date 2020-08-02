@@ -265,7 +265,7 @@ class DB(object):
                 if mode == 0 and data["deleted"] == 1:
                     continue
             # 期限切れのものを排除する
-            if show_over_deadline == 0:
+            if show_over_deadline == 1:
                 if datetime.datetime.strptime(data["limit_at"], '%Y/%m/%d %H:%M')-now < datetime.timedelta(hours=0):
                     continue
             # 済のものを排除する
