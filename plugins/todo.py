@@ -81,8 +81,9 @@ def todo_announce(message, title, limit_at, note):
 #titleとlimitに加えてstatusも登録できるようにする
 @respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_add_status(message, title, limit_at, status):
-    database = DB(os.environ['TODO_DB'])
-    database.add_dict({"title": title, "limit_at": limit_at, "status": status})
+    data={"title": title,"limit_at": limit_at, "status": status}
+    msg=todo_add_sub(message,data)
+    message.reply(msg)
 
 #status未のものを済にする
 @respond_to(r'\s+todo\s+finish\s+(\S+)$')
