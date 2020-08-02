@@ -1,27 +1,26 @@
 import random
+from slackbot.bot import respond_to
+from slackbot.bot import listen_to
 
-h=0
-message = ""
-def dice(num,men)
+mess = ""
+def dice(num,m):
+    h = 0
     for i in range(num):
-        f = random.randint(1,men)
-        if i==0:
-             message = "(" + str(f) + ","
-        elif i==num:
-             message = message + str(f) + ")"
-        else:
-             message = message + str(f) + ","
-     h = h + f
+         f = random.randint(1,m)
+         h = h + f
+         if i==0:
+             mess = "(" + str(f) + ","
+         elif i==num-1:
+             mess = mess+ str(f) + ")"
+         else:
+             mess = mess + str(f) + ","
 
-   message = str(h) + message
-   return message
+         
+         
+    mess = str(h)+mess
+    return mess
 
 
-@respond_to(r'dice\s+(\d+)\s+d\s+(\d+)')
-def diceroll(decl,roll,cedec,sty)
-    if isinstance(roll,int)==false:
-        message.reply('第一引数が不正です')
-    elif isinstance(sty,int)==false:
-        message.reply('第二引数が不正です')
-    else:
-        message.reply(dice(roll,sty))
+@respond_to(r'^dice\s(\d+)\s+(\d+)$')
+def diceroll(message,roll,sty):  
+    message.reply(dice(int(roll),int(sty)))
