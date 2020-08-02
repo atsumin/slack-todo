@@ -70,7 +70,6 @@ class DB(object):
 
         オプションで内容も初期化することが出来る。
         """
-        id = mojimoji.zen_to_han(id, kana=False, ascii=False)
         if self.select_id(id)["user"]==userid:
             result = self.change_id(id, "deleted", 1)
             if result == 200 and secret:
@@ -91,7 +90,6 @@ class DB(object):
         idが存在しない値であるときは全要素Noneで返すので注意
         """
         dict_list = []
-        id = mojimoji.zen_to_han(id, kana=False, ascii=False)
         columns = self.__conn.execute("select * from todo").description
         for r in self.__c.execute(f"select * from todo where id=={id}"):
             item = list(map(str, r))
