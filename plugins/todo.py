@@ -57,20 +57,21 @@ def todo_cancel_announcement(message, id):
     message.reply(msg)
 
 
-@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
+
+@respond_to(r'\s*todo\s+add\s+(\S+)\s+(\S+)$')
 def todo_add(message, title, limit_at):
     data={"title": title,"limit_at": limit_at}
     msg=todo_add_sub(message,data)
     message.reply(msg)
 
-@respond_to(r'\s+todo\s+add\s+(\S+)$')
+@respond_to(r'\s*todo\s+add\s+(\S+)$')
 def todo_add_unlimit(message, title):
     data={"title": title}
     msg=todo_add_sub(message,data)
     message.reply(msg)
 
 
-@respond_to(r'todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
+@respond_to(r'\s*todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_announce(message, title, limit_at, note):
     data= {"title": title, "limit_at": limit_at, "note": note}
     msg=todo_add_sub(message,data,announce=True)
@@ -78,41 +79,81 @@ def todo_announce(message, title, limit_at, note):
 
 
 #titleとlimitに加えてstatusも登録できるようにする
-@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
+@respond_to(r'\s*todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_add_status(message, title, limit_at, status):
     database = DB(os.environ['TODO_DB'])
     database.add_dict({"title": title, "limit_at": limit_at, "status": status})
 
-#status未のものを済にする
-@respond_to(r'\s+todo\s+finish\s+(\S+)$')
-def todo_finish(message, id):
+@respond_to(r'\s*todo\s+finish\s+(.*)')
+def todo_finish(message, ids):
+    msg = ''
+    msg1 = '\nid： '
+    msg2 = '\nid:  '
+    success = False
+    failed = False
+    id = ids.split()
     database = DB(os.environ['TODO_DB'])
-    database.change_id(id, 'status', '済')
-    message.reply("お疲れさまでした")
+    for i in id:
+        strip = i.find('|')
+        if strip > 0:
+            i = i[strip+1:]
+        i = i.replace('>','')
+        status_code = database.change_id(i, 'status', '済')
+        if status_code == 200:
+            msg1 += '`' + i + '` '
+            success = True
+        if status_code == 401:
+            msg2 += '`' + i + '` ' 
+            failed = True
+    if success and failed:
+        msg = msg1 + 'を完了しました。お疲れ様でした。' + msg2 + 'は存在しません。'
+    elif success:
+        msg = msg1 + 'を完了しました。お疲れ様でした。'
+    elif failed:
+        msg = msg2 + 'は存在しません。'
+    else:
+        msg = 'このコマンドは実行できません。'
+    message.reply(msg)
 
-@respond_to(r'\s+todo\s+list$')
+# 実用性の観点からから未のものだけ表示する
+@respond_to(r'\s*todo\s+list$')
 def todo_list(message):
     database = DB(os.environ['TODO_DB'])
     userId = tools.getmsginfo(message)['user_id']
-    data = database.search('user', userId, mode=1)
-    str_list = 'TODO list:\n'
+    data = database.dict_list_sorted(show_over_deadline=3, user_id=userId)
+    num = 0
+    str_list = ''
     for r in data:
-        str_list += ', '.join(map(str, r.values()))
-        str_list += '\n'
+        num += 1
+        if r["importance"] == '大':
+            #もう少しわかりやすく区別したい
+            if r["subject"] == 'None':
+                str_list += f' _`{r["id"]}`_ _*{r["title"]}*_   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+            else:
+                str_list += f' _`{r["id"]}`_ _{r["subject"]}_ _*{r["title"]}*_   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+        else:
+            if r["subject"] == 'None':
+                str_list += f' `{r["id"]}` *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+            else:
+                str_list += f' `{r["id"]}` {r["subject"]} *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
+    if str_list == '':
+        str_list = '現在のリストにはタスクが存在しません。'
+    else:
+        str_list = f'現在のタスクは以下の{num}件です。\n' + str_list
     message.reply(str_list)
 
-@respond_to(r'\s+todo\s+list\s+all$')
+@respond_to(r'\s*todo\s+list\s+all$')
 def todo_list_all(message):
     database = DB(os.environ['TODO_DB'])
     message.reply(database.list())
 
-@respond_to(r'\s+todo\s+reset$')
+@respond_to(r'\s*todo\s+reset$')
 def todo_reset(message):
     database = DB(os.environ['TODO_DB'])
     database.reset()
     message.reply('データベースを初期化しました')
 
-@respond_to(r'\s+todo\s+search\s+(\S+)$')
+@respond_to(r'\s*todo\s+search\s+(\S+)$')
 def todo_search(message, text):
     msg = ''
     num = 0
