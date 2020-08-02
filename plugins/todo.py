@@ -267,7 +267,7 @@ def todo_view(data, info_str) -> str:
         str_list = f'{info_str}タスクは以下の{num}件です。\n' + str_list
     return str_list
         
-@respond_to(r'\s+todo\s+help$')
+@respond_to(r'\s*todo\s+help$')
 def todo_help(message):
     msg = '使用可能なコマンド\n'\
     '・todo add (タスク名) [締切日]\n　タスクを登録します\n'\
