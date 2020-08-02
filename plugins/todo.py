@@ -88,9 +88,11 @@ def todo_add_status(message, title, limit_at, status):
 def todo_finish(message, ids):
     msg = ''
     msg1 = '\nid： '
-    msg2 = '\nid:  '
+    msg2 = '\nid： '
+    msg3 = '\nid： '
     success = False
     failed = False
+    others = False
     id = ids.split()
     database = DB(os.environ['TODO_DB'])
     for i in id:
@@ -98,19 +100,31 @@ def todo_finish(message, ids):
         if strip > 0:
             i = i[strip+1:]
         i = i.replace('>','')
+        data = database.select_id(i)
+        if data["user"] == None:
+            msg2 += '`' + i + '` ' 
+            failed = True
+            continue
+        elif tools.getmsginfo(message)['user_id'] != data["user"]:
+            msg3 += '`' + i + '` '
+            others = True
+            continue
         status_code = database.change_id(i, 'status', '済')
         if status_code == 200:
             msg1 += '`' + i + '` '
             success = True
-        if status_code == 401:
-            msg2 += '`' + i + '` ' 
-            failed = True
-    if success and failed:
+    if success and failed and others:
+        msg = msg1 + 'を完了しました。お疲れ様でした。' + msg2 + 'は存在しません。' + msg3 + 'は他人のタスクです。'
+    elif success and failed:
         msg = msg1 + 'を完了しました。お疲れ様でした。' + msg2 + 'は存在しません。'
+    elif failed and others:
+        msg = msg2 + 'は存在しません。' + msg3 + 'は他人のタスクです。'
     elif success:
         msg = msg1 + 'を完了しました。お疲れ様でした。'
     elif failed:
         msg = msg2 + 'は存在しません。'
+    elif others:
+        msg = msg3 + 'は他人のタスクです。'
     else:
         msg = 'このコマンドは実行できません。'
     message.reply(msg)
