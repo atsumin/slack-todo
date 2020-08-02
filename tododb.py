@@ -90,6 +90,7 @@ class DB(object):
         idが存在しない値であるときは全要素Noneで返すので注意
         """
         dict_list = []
+        id = mojimoji.zen_to_han(id, kana=False, ascii=False)
         columns = self.__conn.execute("select * from todo").description
         for r in self.__c.execute(f"select * from todo where id=={id}"):
             item = list(map(str, r))
