@@ -14,6 +14,7 @@ def com_set(message):
     todo_list = re.search(r'^list$', text)
     todo_list_all = re.search(r'^list\s+all$', text)
     todo_reset = re.search(r'^reset$', text)
+    todo_finish = re.search(r'^finish\s+(.*)', text)
     todo_search = re.search(r'^search\s+(\S+)$', text)
     todo_change_id = re.search(r'^change\s+(\S+)\s+(\S+)\s+(\S+)$', text)
     todo_announce = re.search(r'^announce\s+(\S+)\s+(\S+)\s+(\S+)$', text)
@@ -32,6 +33,8 @@ def com_set(message):
         todo.todo_list_all(message)
     elif todo_reset:
         todo.todo_reset(message)
+    elif todo_finish:
+        todo.todo_finish(message, todo_finish.group(1))
     elif todo_search:
         todo.todo_search(message, todo_search.group(1))
     elif todo_change_id: 
