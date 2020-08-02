@@ -58,15 +58,10 @@ def todo_cancel_announcement(message, id):
 
 
 
-@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
-def todo_add(message, title, limit_at):
-    data={"title": title,"limit_at": limit_at}
-    msg=todo_add_sub(message,data)
-correctness = False
+
 @respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
 def todo_add(message, title, limit_at):
     # ユーザー情報取得
-    correctness = True
     info=tools.getmsginfo(message)
     data= {"title": title, "limit_at": limit_at,"user": info["user_id"]}
     database = DB(os.environ['TODO_DB'])
@@ -118,7 +113,6 @@ def todo_finish(message, id):
 
 @respond_to(r'\s+todo\s+list$')
 def todo_list(message):
-    correctness = True
     database = DB(os.environ['TODO_DB'])
     userId = tools.getmsginfo(message)['user_id']
     data = database.search('user', userId, mode=1)
@@ -135,14 +129,12 @@ def todo_list_all(message):
 
 @respond_to(r'\s+todo\s+reset$')
 def todo_reset(message):
-    correctness = True
     database = DB(os.environ['TODO_DB'])
     database.reset()
     message.reply('データベースを初期化しました')
 
 @respond_to(r'\s+todo\s+search\s+(\S+)$')
 def todo_search(message, text):
-    correctness = True
     msg = ''
     num = 0
     database = DB(os.environ['TODO_DB'])
@@ -158,7 +150,6 @@ def todo_search(message, text):
 
 @respond_to(r'\s*todo\s+change\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_change_id(message, id, column, value):
-    correctness = True
     database = DB(os.environ['TODO_DB'])
     status_code = database.change_id(id, column, value)
     msg = ''
@@ -225,7 +216,6 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
         
 @respond_to(r'\s+todo\s+help$')
 def todo_help(message):
-    correctness = True
     msg = '使用可能なコマンド\n'\
     '・todo add (タスク名) [締切日]\n　タスクを登録します\n'\
     '・todo list\n　登録されたタスクを表示します\n'\

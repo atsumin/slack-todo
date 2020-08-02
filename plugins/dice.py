@@ -2,8 +2,9 @@ import random
 from slackbot.bot import respond_to
 from slackbot.bot import listen_to
 
-mess = ""
+
 def dice(num,m):
+    mess = ""
     h = 0
     for i in range(num):
          f = random.randint(1,m)

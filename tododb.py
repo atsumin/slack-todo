@@ -226,8 +226,8 @@ class DB(object):
         """
         str_list = "TODO list:\n"
         for r in self.__c.execute("select * from todo"):
-             str_list += ', '.join(map(str, r))
-             str_list += '\n'
+            str_list += ', '.join(map(str, r))
+            str_list += '\n'
 
         return str_list
 
