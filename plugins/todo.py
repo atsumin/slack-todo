@@ -58,20 +58,20 @@ def todo_cancel_announcement(message, id):
 
 
 
-@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)$')
+@respond_to(r'\s*todo\s+add\s+(\S+)\s+(\S+)$')
 def todo_add(message, title, limit_at):
     data={"title": title,"limit_at": limit_at}
     msg=todo_add_sub(message,data)
     message.reply(msg)
 
-@respond_to(r'\s+todo\s+add\s+(\S+)$')
+@respond_to(r'\s*todo\s+add\s+(\S+)$')
 def todo_add_unlimit(message, title):
     data={"title": title}
     msg=todo_add_sub(message,data)
     message.reply(msg)
 
 
-@respond_to(r'todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
+@respond_to(r'\s*todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_announce(message, title, limit_at, note):
     data= {"title": title, "limit_at": limit_at, "note": note}
     msg=todo_add_sub(message,data,announce=True)
@@ -79,12 +79,12 @@ def todo_announce(message, title, limit_at, note):
 
 
 #titleとlimitに加えてstatusも登録できるようにする
-@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
+@respond_to(r'\s*todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
 def todo_add_status(message, title, limit_at, status):
     database = DB(os.environ['TODO_DB'])
     database.add_dict({"title": title, "limit_at": limit_at, "status": status})
 
-@respond_to(r'\s+todo\s+finish\s+(.*)')
+@respond_to(r'\s*todo\s+finish\s+(.*)')
 def todo_finish(message, ids):
     msg = ''
     msg1 = '\nid： '
@@ -113,7 +113,7 @@ def todo_finish(message, ids):
         msg = msg2 + 'は存在しません。'
     message.reply(msg)
 
-@respond_to(r'\s+todo\s+list$')
+@respond_to(r'\s*todo\s+list$')
 def todo_list(message):
     database = DB(os.environ['TODO_DB'])
     userId = tools.getmsginfo(message)['user_id']
@@ -124,18 +124,18 @@ def todo_list(message):
         str_list += '\n'
     message.reply(str_list)
 
-@respond_to(r'\s+todo\s+list\s+all$')
+@respond_to(r'\s*todo\s+list\s+all$')
 def todo_list_all(message):
     database = DB(os.environ['TODO_DB'])
     message.reply(database.list())
 
-@respond_to(r'\s+todo\s+reset$')
+@respond_to(r'\s*todo\s+reset$')
 def todo_reset(message):
     database = DB(os.environ['TODO_DB'])
     database.reset()
     message.reply('データベースを初期化しました')
 
-@respond_to(r'\s+todo\s+search\s+(\S+)$')
+@respond_to(r'\s*todo\s+search\s+(\S+)$')
 def todo_search(message, text):
     msg = ''
     num = 0
