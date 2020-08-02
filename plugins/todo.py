@@ -61,6 +61,7 @@ def todo_cancel_announcement(message, id):
 def todo_add(message, title, limit_at):
     data={"title": title,"limit_at": limit_at}
     msg=todo_add_sub(message,data)
+    message.reply(msg)
 
 @respond_to(r'\s+todo\s+add\s+(\S+)$')
 def todo_add_unlimit(message, title):
