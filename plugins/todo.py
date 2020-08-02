@@ -84,12 +84,34 @@ def todo_add_status(message, title, limit_at, status):
     database = DB(os.environ['TODO_DB'])
     database.add_dict({"title": title, "limit_at": limit_at, "status": status})
 
-#status未のものを済にする
-@respond_to(r'\s+todo\s+finish\s+(\S+)$')
-def todo_finish(message, id):
+@respond_to(r'\s+todo\s+finish\s+(.*)')
+def todo_finish(message, ids):
+    msg = ''
+    msg1 = '\nid： '
+    msg2 = '\nid:  '
+    success = False
+    failed = False
+    id = ids.split()
     database = DB(os.environ['TODO_DB'])
-    database.change_id(id, 'status', '済')
-    message.reply("お疲れさまでした")
+    for i in id:
+        strip = i.find('|')
+        if strip > 0:
+            i = i[strip+1:]
+        i = i.replace('>','')
+        status_code = database.change_id(i, 'status', '済')
+        if status_code == 200:
+            msg1 += '`' + i + '` '
+            success = True
+        if status_code == 401:
+            msg2 += '`' + i + '` ' 
+            failed = True
+    if success and failed:
+        msg = msg1 + 'を完了しました。お疲れ様でした。' + msg2 + 'は存在しません。'
+    elif success:
+        msg = msg1 + 'を完了しました。お疲れ様でした。'
+    elif failed:
+        msg = msg2 + 'は存在しません。'
+    message.reply(msg)
 
 @respond_to(r'\s+todo\s+list$')
 def todo_list(message):
