@@ -3,6 +3,7 @@ import datetime
 import re
 import time
 from plugins import tools
+import mojimoji
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
            "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0, "subject": None,"note": None,"importance": "中"}
@@ -69,6 +70,7 @@ class DB(object):
 
         オプションで内容も初期化することが出来る。
         """
+        id = mojimoji.zen_to_han(id, kana=False, ascii=False)
         if self.select_id(id)["user"]==userid:
             result = self.change_id(id, "deleted", 1)
             if result == 200 and secret:
@@ -89,6 +91,7 @@ class DB(object):
         idが存在しない値であるときは全要素Noneで返すので注意
         """
         dict_list = []
+        id = mojimoji.zen_to_han(id, kana=False, ascii=False)
         columns = self.__conn.execute("select * from todo").description
         for r in self.__c.execute(f"select * from todo where id=={id}"):
             item = list(map(str, r))
@@ -165,6 +168,7 @@ class DB(object):
         keys = DEFAULT.keys()
         now = datetime.datetime.now()
         now_f = datetime.datetime.now().strftime('%Y/%m/%d %H:%M')
+        id = mojimoji.zen_to_han(id, kana=False, ascii=False)
         if column == 'id' or column == 'update_at':
             status_code = 404
             return status_code
