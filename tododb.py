@@ -235,7 +235,9 @@ class DB(object):
 
         引数でmode=1とすると、削除されたデータを含めて取得
 
-        引数でshow_over_deadline=0 とすると、期限切れのものを含めて取得
+        引数でshow_over_deadline=0 とすると、期限切れのものを含めて取得、 
+        2 とすると、期限切れと未のものを取得、
+        3 とすると、未のものだけ取得
 
         引数でuser_id= ユーザーのid とすると、特定ユーザーのデータのみ取得
 
@@ -261,6 +263,14 @@ class DB(object):
             # 期限切れのものを排除する
             if show_over_deadline == 0:
                 if datetime.datetime.strptime(data["limit_at"], '%Y/%m/%d %H:%M')-now < datetime.timedelta(hours=0):
+                    continue
+            # 済のものを排除する
+            if show_over_deadline == 2:
+                if data["status"] == '済':
+                    continue
+            # 済、期限切れのものを排除する
+            if show_over_deadline == 3:
+                if data["status"] == '済' or data["status"] == '期限切れ':
                     continue
             # 他のユーザーのものを排除する
             if user_id != None:
