@@ -230,6 +230,7 @@ class DB(object):
         for r in self.__c.execute("select * from todo"):
             str_list += ', '.join(map(str, r))
             str_list += '\n'
+
         return str_list
 
     def dict_list(self, mode=0, show_over_deadline=1, user_id=None) -> list:
