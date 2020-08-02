@@ -3,6 +3,7 @@ import datetime
 import re
 import time
 from plugins import tools
+import mojimoji
 
 DEFAULT = {"title": "Noname", "limit_at": "2999/12/31 23:59",
            "update_at": "2000/01/01 0:00", "status": "未", "noticetime": 3, "user": None, "deleted": 0, "subject": None,"note": None,"importance": "中"}
@@ -165,6 +166,7 @@ class DB(object):
         keys = DEFAULT.keys()
         now = datetime.datetime.now()
         now_f = datetime.datetime.now().strftime('%Y/%m/%d %H:%M')
+        id = mojimoji.zen_to_han(id, kana=False, ascii=False)
         if column == 'id' or column == 'update_at':
             status_code = 404
             return status_code
@@ -235,7 +237,9 @@ class DB(object):
 
         引数でmode=1とすると、削除されたデータを含めて取得
 
-        引数でshow_over_deadline=0 とすると、期限切れのものを含めて取得
+        引数でshow_over_deadline=0 とすると、期限切れのものを含めて取得、 
+        2 とすると、期限切れと未のものを取得、
+        3 とすると、未のものだけ取得
 
         引数でuser_id= ユーザーのid とすると、特定ユーザーのデータのみ取得
 
@@ -261,6 +265,14 @@ class DB(object):
             # 期限切れのものを排除する
             if show_over_deadline == 0:
                 if datetime.datetime.strptime(data["limit_at"], '%Y/%m/%d %H:%M')-now < datetime.timedelta(hours=0):
+                    continue
+            # 済のものを排除する
+            if show_over_deadline == 2:
+                if data["status"] == '済':
+                    continue
+            # 済、期限切れのものを排除する
+            if show_over_deadline == 3:
+                if data["status"] == '済' or data["status"] == '期限切れ':
                     continue
             # 他のユーザーのものを排除する
             if user_id != None:
