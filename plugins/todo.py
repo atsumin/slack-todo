@@ -121,8 +121,10 @@ def todo_list(message):
     database = DB(os.environ['TODO_DB'])
     userId = tools.getmsginfo(message)['user_id']
     data = database.dict_list_sorted(show_over_deadline=3, user_id=userId)
-    str_list = 'TODO list:\n'
+    num = 0
+    str_list = ''
     for r in data:
+        num += 1
         if r["importance"] == '大':
             #もう少しわかりやすく区別したい
             if r["subject"] == 'None':
@@ -134,8 +136,10 @@ def todo_list(message):
                 str_list += f' `{r["id"]}` *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
             else:
                 str_list += f' `{r["id"]}` {r["subject"]} *{r["title"]}*   期限：{r["limit_at"][5:]}   status：{r["status"]} \n'
-    if str_list == 'TODO list:\n':
+    if str_list == '':
         str_list = '現在のリストにはタスクが存在しません。'
+    else:
+        str_list = f'現在のタスクは以下の{num}件です。\n' + str_list
     message.reply(str_list)
 
 @respond_to(r'\s*todo\s+list\s+all$')
