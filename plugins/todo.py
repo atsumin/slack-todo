@@ -211,7 +211,7 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
     now = datetime.datetime.now()
     if "limit_at" in data.keys() or not "status" in data.keys():
         if not "limit_at" in data.keys() and not "status" in data.keys():
-            data["limit_at"]=None
+            data["limit_at"]="2999/12/31 23:59"
         limit_at_fin = tools.datetrans(data["limit_at"], now)
         msg="以下の内容で"
         if limit_at_fin != None or data["limit_at"] == None:
