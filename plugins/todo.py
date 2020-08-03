@@ -255,7 +255,7 @@ def todo_help(message,comm):
     "`todo list`\n"\
     "あなたの未完了タスクを全て表示します。\n"\
     "`todo list all`\n"\
-    "データベースに登録された全てのタスクを詳細に表示します\n"\
+    "あなたの全てのタスクを詳細に表示します\n"\
     "`todo finish (id)`\n"\
     "指定したidのタスクを完了済みにします\n"\
     "`todo delete (id)`\n"\
