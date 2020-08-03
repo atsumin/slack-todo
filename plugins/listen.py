@@ -7,6 +7,7 @@ import time, re
 def com_set(message):
     text = message.body['text'][1:]
 
+    todo_add_unlimit = re.search(r'^add\s+(\S+)$', text)
     todo_add = re.search(r'^add\s+(\S+)\s+(\S+)$', text)
     todo_delete_secret = re.search(r'^delete_secret\s+(\d+)$', text)
     todo_delete = re.search(r'^delete\s+(\d+)$', text)
@@ -21,7 +22,9 @@ def com_set(message):
     todo_announce = re.search(r'^announce\s+(\S+)\s+(\S+)\s+(\S+)$', text)
     todo_help = re.search(r'^help', text)
 
-    if todo_add:
+    if todo_add_unlimit:
+        todo.todo_add_unlimit(message, todo_add_unlimit.group(1))
+    elif todo_add:
         todo.todo_add(message, todo_add.group(1), todo_add.group(2))
     elif todo_delete_secret:
         todo.todo_delete_secret(message,todo_delete_secret.group(1))

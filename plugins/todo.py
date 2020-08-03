@@ -208,10 +208,12 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
         info=tools.getmsginfo(message)
         data["user"]=info["user_id"]
     database = DB(os.environ['TODO_DB'])
+    has_limit = True
     now = datetime.datetime.now()
     if "limit_at" in data.keys() or not "status" in data.keys():
         if not "limit_at" in data.keys() and not "status" in data.keys():
             data["limit_at"]="2999/12/31 23:59"
+            has_limit = False
         limit_at_fin = tools.datetrans(data["limit_at"], now)
         msg="以下の内容で"
         if limit_at_fin != None or data["limit_at"] == None:
@@ -222,7 +224,10 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
                 noticetime = tools.noticetimeSet(limit_at_format, now)
                 data["noticetime"]=noticetime
                 data["limit_at"]=limit_at_fin
-            msg += "、期限を正しく設定して"
+            if has_limit:
+                msg += "、期限を正しく設定して"
+            else:
+                msg += "、無期限の課題を"
         else:
             return "limit_atの形が不正です。以下の入力例を参考にしてください。\n202008161918: 2020年8月16日19時18分となります。\n0816: 現在以降で最も早い8月16日23時59分となります。"
         data = database.add_dict(data)
