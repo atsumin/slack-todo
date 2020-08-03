@@ -19,7 +19,7 @@ def com_set(message):
     todo_finish = re.search(r'^finish\s+(.*)', text)
     todo_search = re.search(r'^search\s+(\S+)$', text)
     todo_change_id = re.search(r'^change\s+(\S+)\s+(\S+)\s+(\S+)$', text)
-    todo_announce = re.search(r'^announce\s+(\S+)\s+(\S+)\s+(\S+)$', text)
+    todo_announce = re.search(r'^announce\s+(\S+)\s+(\S+)\s+([\s\S]+)$', text)
     todo_help = re.search(r'^help', text)
 
     if todo_add_unlimit:
