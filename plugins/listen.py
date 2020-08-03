@@ -40,7 +40,7 @@ def com_set(message):
     elif todo_announce:
         todo.todo_announce(message, todo_announce.group(1), todo_announce.group(2), todo_announce.group(3))
     else:
-        message.reply('このコマンドは無効です')
+        message.reply('このコマンドは無効です\n私にtodo helpとメンションしてください！使用可能なコマンドを表示できます!')
 
 @listen_to('what')
 def listen_what(message):
