@@ -235,7 +235,8 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
         for item in data.items():
             if item[0]=="user":
                 continue
-            msg+=f"\n{item[0]}: {item[1]}"
+            if not item[0]=="noticetime" or item[0]=="deleted":
+             msg+=f"\n{item[0]}: {item[1]}"
         return msg
     if "status" in data.keys():
         data["noticetime"]=3
@@ -244,7 +245,8 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
         for item in data.items():
             if item[0]=="user":
                 continue
-            msg+=f"\n{item[0]}: {item[1]}"
+            if not item[0]=="noticetime" or item[0]=="deleted":
+                msg+=f"\n{item[0]}: {item[1]}"
         return msg
     return "何らかの不具合により追加できません。"
 
@@ -272,16 +274,46 @@ def todo_view(data, info_str) -> str:
         str_list = f'{info_str}タスクは以下の{num}件です。\n' + str_list
     return str_list
         
-@respond_to(r'\s*todo\s+help$')
-def todo_help(message):
-    msg = '使用可能なコマンド\n'\
-    '・todo add (タスク名) [締切日]\n　タスクを登録します\n'\
-    '・todo list\n　登録されたタスクを表示します\n'\
-    '・todo reset\n　データを初期化します\n'\
-    '・todo search(文字列)\n　入力に一致するタスク名を持つタスクを検索します。そのタスクの状態、期限、idが表示されます\n'\
-    '・todo change (タスクのid) (limit_at|status|title) (変更後の値)\n'\
-    '　登録したタスクの情報を変更します。\n'\
-    '　第二引数には、締切日を変更したい場合limit_at, 完了・未完了を変更したい場合status, タスク名を変更したい場合titleを入力してください\n'\
-    '　タスクのid及びタスク情報の最終更新日を変更することはできません\n'
+#ToDo機能についての説明を表示する
+@respond_to(r'^todo\s(help)$')
+def todo_help(message,comm):
+    msg = \
+    "\n〇ToDo機能が扱うデータ名とその意味\n"\
+    "id(変更不可): タスクの個別識別番号です。`1`というように表示されます\n"\
+    "title: タスク名です\n"\
+    "limit_at: タスクの期限です。2020/03/21/23:12というように表示されます\n"\
+    "update_at(変更不可): タスク情報の最終更新日です\n"\
+    "status: タスクの状態を表します。「未」「済」「期限切れ」の3つです\n"\
+    "subject:そのタスクの教科、分野、ジャンルです。「数学」「ILASセミナー」「副業」というように設定してください\n"\
+    "note:タスクに関する備考です。自由に記述できます\n"\
+    "importance:　そのタスクの優先度です。初期値は「中」です\n"\
+    "\n〇ToDo機能について使用可能なコマンド\n"\
+    "`todo add（タスク名) [期限] [備考]`\n"\
+    "タスクを追加します\n"\
+    "`todo list`\n"\
+    "あなたの未完了タスクを全て表示します。\n"\
+    "`todo list all`\n"\
+    "あなたの全てのタスクを詳細に表示します\n"\
+    "`todo finish (id)`\n"\
+    "指定したidのタスクを完了済みにします\n"\
+    "`todo delete (id)`\n"\
+    "指定したidのタスクを非表示にします\n"\
+    "`todo delete_secret (id)`\n"\
+    "指定したidのタスクを消去します\n"\
+    "`todo search (検索文字列)`\n"\
+    "入力した文字をtitleに含むタスクを表示します\n"\
+    "`todo announce (タスク名) (期限) (備考)`\n"\
+    "全てのユーザー共通のタスク（アナウンスメント）を登録します\n"\
+    "`todo cancel_announcement (id)`\n"\
+    "指定したidのアナウンスメントを取り消します\n"\
+    "`todo change (id) (データ名) (変更後の値)`\n"\
+    "idで指定したタスクの指定したデータの値を入力した値に変更します\n"\
+    "`todo reset`\n"\
+    "データベースを初期化します\n"\
+    "\n〇その他\n"\
+    "`@testbot (コマンド)`\n"\
+    "とする代わりに\n"\
+    "`!(コマンド)`"\
+    "としてもコマンドが使えます"
     message.reply(msg)
 
