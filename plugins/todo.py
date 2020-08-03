@@ -71,7 +71,7 @@ def todo_add_unlimit(message, title):
     message.reply(msg)
 
 
-@respond_to(r'\s*todo\s+announce\s+(\S+)\s+(\S+)\s+(\S+)$')
+@respond_to(r'\s*todo\s+announce\s+(\S+)\s+(\S+)\s+([\s\S]+)$')
 def todo_announce(message, title, limit_at, note):
     data= {"title": title, "limit_at": limit_at, "note": note}
     msg=todo_add_sub(message,data,announce=True)
