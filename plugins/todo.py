@@ -143,7 +143,7 @@ def todo_list(message):
 def todo_list_all(message):
     database = DB(os.environ['TODO_DB'])
     userId = tools.getmsginfo(message)['user_id']
-    data = database.dict_list_sorted(show_over_deadline=0, user_id=userId)
+    data = database.dict_list_sorted(show_over_deadline=1, user_id=userId)
     msg = todo_view(data, '')
     message.reply(msg)
 
