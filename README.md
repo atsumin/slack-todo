@@ -23,6 +23,7 @@ ToDo 管理とその他さまざまな反応をする slackbot
   - `@bot todo reset`: ToDo の DB をリセットする
   - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
   - `@bot todo finish 'id'`: statusが未のものを済にする
+  - `@bot todo example`: todoの入力方法の例を表示する
 
 ## ToDo DBのスキーマ
 |id|title|    limit_at    |   update_at    |status|noticetime|   user    |deleted|
