@@ -221,7 +221,7 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
         for item in data.items():
             if item[0]=="user":
                 continue
-            if not item[0]=="noticetime" or item[0]=="deleted":
+            if not (item[0]=="noticetime" or item[0]=="deleted"):
              msg+=f"\n{item[0]}: {item[1]}"
         return msg
     if "status" in data.keys():
