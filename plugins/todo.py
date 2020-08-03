@@ -133,6 +133,9 @@ def todo_finish(message, ids):
 def todo_show(message, id):
     db = DB(os.environ['TODO_DB'])
     data = db.select_id(id)
+    user=tools.getmsginfo(message)["user_id"]
+    if data["user"] != user and data["user"] != "all":
+        return "お探しのデータは存在しません。"
     if data["update_at"] != "None" and data["deleted"] == "0":
         msg = f"id:{id}の詳細データ\n"
         msg += "```"
