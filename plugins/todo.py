@@ -92,6 +92,11 @@ def todo_finish(message, id):
     database.change_id(id, 'status', '済')
     message.reply("お疲れさまでした")
 
+#exampleを表示する
+@respond_to(r'\s+todo\s+example$')
+def todo_example(message):
+    message.reply("\n<タスクの登録> todo add タスク名\n<タスクの一覧表示(userのみ)> todo list\n<タスクの一覧表示> todo list all\n<タスクの消去> todo delete id\n<登録したタスクのリセット> todo reset\n<タスクの検索> todo research タスク名に含まれる文字\n<status未→済> todo finish id")
+
 @respond_to(r'\s+todo\s+list$')
 def todo_list(message):
     database = DB(os.environ['TODO_DB'])
