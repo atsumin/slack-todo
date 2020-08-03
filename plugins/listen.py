@@ -12,6 +12,7 @@ def com_set(message):
     todo_delete_secret = re.search(r'^delete_secret\s+(\d+)$', text)
     todo_delete = re.search(r'^delete\s+(\d+)$', text)
     todo_cancel_announcement = re.search(r'^cancel_announcement\s+(\d+)$', text)
+    todo_show = re.search(r'^show\s+(\S+)$',text)
     todo_list = re.search(r'^list$', text)
     todo_list_all = re.search(r'^list\s+all$', text)
     todo_list_notdone = re.search(r'^list\s+\-1', text)
@@ -32,6 +33,8 @@ def com_set(message):
         todo.todo_delete(message,todo_delete.group(1))
     elif todo_cancel_announcement:
         todo.todo_cancel_announcement(message,todo_cancel_announcement.group(1))
+    elif todo_show:
+        todo.todo_show(message,todo_show.group(1))
     elif todo_list:
         todo.todo_list(message)
     elif todo_list_all:

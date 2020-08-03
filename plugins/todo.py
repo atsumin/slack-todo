@@ -129,6 +129,39 @@ def todo_finish(message, ids):
         msg = 'このコマンドは実行できません。'
     message.reply(msg)
 
+@respond_to(r'\s*todo\s+show\s+(\S+)$')
+def todo_show(message, id):
+    db = DB(os.environ['TODO_DB'])
+    data = db.select_id(id)
+    user=tools.getmsginfo(message)["user_id"]
+    if data["user"] != user and data["user"] != "all":
+        return "お探しのデータは存在しません。"
+    if data["update_at"] != "None" and data["deleted"] == "0":
+        msg = f"id:{id}の詳細データ\n"
+        msg += "```"
+        if data["user"] == "all":
+            msg += "これは全体向けのお知らせです。\n"
+        msg += data["title"]+"\n\n教科: "
+        if data["subject"] ==None or data["subject"] =="None":
+            msg += "不明"
+        else:
+            msg += data["subject"]
+        msg += "\n"
+        msg += "締切: "
+        if data["limit_at"] == "2999/12/31 23:59":
+            msg += "無期限"
+        else:
+            msg += data["limit_at"]
+        msg += "\n"
+        msg += "状態: "+data["status"]+"\n"
+        msg += "※備考\n "+data["note"]+"\n\n"
+        msg += "最終更新: "+data["update_at"]+"```\n"
+    else:
+        msg = "お探しのデータは存在しません。"
+
+    message.reply(msg)
+
+
 # 実用性の観点からから未のものだけ表示する
 @respond_to(r'\s*todo\s+list$')
 def todo_list(message):
