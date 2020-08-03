@@ -76,7 +76,7 @@ def diceroll_unselected(message):
 def diceroll_utakaze(message,comm,roll):
     message.reply(dice_u(int(roll)))
 
-@respond_to(r'^dice\s(help)')
+@respond_to(r'^dice\s(help)$')
 def dice_help(message,comm):
     msg = "\n〇Dice機能について使用可能なコマンド\n"\
      "`dice (ダイスを振る回数)d(ダイスの面数)`\n"\
@@ -86,5 +86,5 @@ def dice_help(message,comm):
      "`dice`\n"\
      "単にdiceと入力すると100面ダイスを1回振ります\n"\
      "`dice u (ダイスを振る回数)`\n"\
-     "指定されただけ6面ダイスを振り、その内訳をダイス目ごとに表示します。ウタカゼTRPGにどうぞ\n"\
+     "指定されただけ6面ダイスを振り、その内訳をダイス目ごとに表示します。ウタカゼTRPGにどうぞ\n"
     message.reply(msg)
