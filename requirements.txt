@@ -2,3 +2,5 @@ slackbot
 python-dateutil==2.8.1
 requests==2.24.0
 mojimoji==0.0.11
+numba==0.49.1
+numpy==1.18.4
