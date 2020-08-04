@@ -54,7 +54,7 @@ class game:
         self.board[pos] = (-1)**(self.step-1)
 
     def board_to_str(self):
-        mark={-1:":white_circle:", 0:":red_circle:", 1:":black_circle:"}
+        mark={-1:":red_circle:", 0:":white_small_square:", 1:":black_circle:"}
         str_board = ""
         str_board += "現在の盤面\n      `A`  `B`  `C`  `D`  `E`\n"
         for i in range(5):
