@@ -13,10 +13,10 @@ def judge(board):
         for i in place:
             k = sum(board[i: i + 3 * itv + 1: itv])
             if k == 4:
-                return True
+                return 1
             if k == -4:
-                return True
-    return False
+                return -1
+    return 0
     
 
 
