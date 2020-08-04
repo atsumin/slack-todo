@@ -14,16 +14,20 @@ ToDo 管理とその他さまざまな反応をする slackbot
 
 * plugins/todo.py
   - `@bot todo add 'タイトル' [締切]`: ToDo 内容を登録する
-  - `@bot todo list`: 参照した user の ToDo の一覧を表示する
-  - `@bot todo list all`: ToDo の一覧を表示する
+  - `@bot todo list`: 参照した user の ToDo の未完了の一覧を表示する
+  - `@bot todo list all`: 参照した user の ToDo の一覧を表示する
+  - `@bot todo list -1`: (暫定コマンド) 参照した user の ToDo の未完了、期限切れの一覧を表示する
   - `@bot todo delete 'id'`: 指定したidを削除する
   - `@bot todo delete_secret 'id'`: 指定したidを削除し、その内容も初期化する
   - `@bot todo cancel_announcement 'id'`: 指定した全体への告知を削除する
   - `@bot todo announce 'タイトル' '日時' '備考'`: 全員共通のことについて、全体への告知を作成する
+  - `@bot todo finish 'id(スペースを開けて複数可能)'`: 課題の状態を未から済に変更する
   - `@bot todo reset`: ToDo の DB をリセットする
   - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
   - `@bot todo finish 'id'`: statusが未のものを済にする
   - `@bot todo example`: todoの入力方法の例を表示する
+  - `@bot todo help`: helpを表示する
+  - `@bot todo show 'id'`: 指定したidの詳細を表示する
 
 ## ToDo DBのスキーマ
 |id|title|    limit_at    |   update_at    |status|noticetime|   user    |deleted|
