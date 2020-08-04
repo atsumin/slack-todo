@@ -80,14 +80,14 @@ def todo_announce(message, title, limit_at, note):
 
 #titleとlimitに加えてsubjectも登録できるようにする
 @respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
-def todo_add_status(message, title, limit_at, subject):
+def todo_add_subject(message, title, limit_at, subject):
     data={"title": title,"limit_at": limit_at, "subject": subject}
     msg=todo_add_sub(message,data)
     message.reply(msg)
 
 #titleとlimitとsubjectに加えてnoteも登録できるようにする
 @respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$')
-def todo_add_status(message, title, limit_at, subject, note):
+def todo_add_note(message, title, limit_at, subject, note):
     data={"title": title,"limit_at": limit_at, "subject": subject, "note": note}
     msg=todo_add_sub(message,data)
     message.reply(msg)
