@@ -40,7 +40,7 @@ def judge(bd, bd_abs):
     return dicts
 
 
-
+@njit(cache=True)
 def evaluation(bd, space):
     bd_abs = np.abs(bd)
     value = 0
@@ -84,14 +84,6 @@ def evaluation(bd, space):
 
     value += sums[3]
     value -= sums[5]
-    # print(chance[0])
-    # print(chance[1])
-    # print(chance[2])
-    # print(chance[3])
-    # print(chance[4])
-    # print(chance[5])
-    # print(chance[6])
-    # print(chance[7])
     if space == 21 or space == 23:
         value += bd[12] * 11
     if space == 20 or space == 22:
@@ -117,5 +109,3 @@ class AI():
         point = evaluation(board, space)
         return point
 
-
-# EOF
