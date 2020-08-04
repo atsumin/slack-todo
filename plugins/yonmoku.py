@@ -24,7 +24,6 @@ def go_forward(message, pos=None):
         pos = 0
     else:
         plist = list(pos)
-        pos = 0
         for i in range(2):
             if plist[i] =="1":
                 plist[i] = "0"
@@ -51,6 +50,10 @@ def go_forward(message, pos=None):
     # 範囲外なら入力し直し
     if pos < 0 or pos > 24:
         message.reply("入力が不正です。以下を参考に入力してください。\n")
+    # 既に置かれていたらやりなおし
+    elif yonmokugame.board[pos] != 0:
+        message.reply("既に駒が置かれているところを選択しています。選び直してください。")
+        return 0
     else:
         (result, board_list) = yonmokugame.run(pos)
         for board in board_list:
