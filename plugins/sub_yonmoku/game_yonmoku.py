@@ -24,6 +24,7 @@ class game:
         self.board_list = []
         # 開始直後だと変化が特殊なので場合分け
         if self.step == 0:
+            self.step += 1
             self.board_list.append(self.board_to_str())
             if self.playerfirst != 1:
                 self.turn_com()
@@ -37,7 +38,7 @@ class game:
             self.board_list.append(self.board_to_str())
             self.judge()
             # 勝利判定に引っかからなかった場合に続行
-            if not self.status == 0:
+            if self.status == 0:
                 self.turn_com()
                 self.judge()
         return (self.status, self.board_list)
