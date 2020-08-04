@@ -15,7 +15,7 @@ def start_game(message):
     go_forward(message)
     
 
-@respond_to(r"^\s*yonmoku\s+set\s+([ABCDEabcde12345]{2})\s*$")    
+@respond_to(r"^\s*yonmoku\s*set\s*([ABCDEabcde12345]{2})\s*$")    
 def go_forward(message, pos=None):   
     global yonmokugame
     
