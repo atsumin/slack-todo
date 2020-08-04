@@ -3,6 +3,7 @@ from tododb import DB
 from . import tools
 import os
 import datetime
+import random
 
 @respond_to(r'\s*todo\s+delete_secret\s+(\d+)$')
 def todo_delete_secret(message, id):
@@ -77,13 +78,32 @@ def todo_announce(message, title, limit_at, note):
     msg=todo_add_sub(message,data,announce=True)
     message.reply(msg)
 
+#titleとlimitに加えてsubjectも登録できるようにする
+@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
+def todo_add_subject(message, title, limit_at, subject):
+    data={"title": title,"limit_at": limit_at, "subject": subject}
+    msg=todo_add_sub(message,data)
+    message.reply(msg)
 
-#titleとlimitに加えてstatusも登録できるようにする
-@respond_to(r'\s*todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)$')
-def todo_add_status(message, title, limit_at, status):
-    database = DB(os.environ['TODO_DB'])
-    database.add_dict({"title": title, "limit_at": limit_at, "status": status})
+#titleとlimitとsubjectに加えてnoteも登録できるようにする
+@respond_to(r'\s+todo\s+add\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$')
+def todo_add_note(message, title, limit_at, subject, note):
+    data={"title": title,"limit_at": limit_at, "subject": subject, "note": note}
+    msg=todo_add_sub(message,data)
+    message.reply(msg)
 
+#exampleを表示する(Botに送信する際の入力の例)
+@respond_to(r'\s+todo\s+example$')
+def todo_example(message):
+    message.reply("\n<タスクの登録> todo add タスク名\n<タスクの一覧表示(userのみ)> todo list\n<タスクの一覧表示> todo list all\n<タスクの消去> todo delete id\n<登録したタスクのリセット> todo reset\n<タスクの検索> todo research タスク名に含まれる文字\n<status未→済> todo finish id")
+
+#上の入力の例をランダムでひとつ教えてくれる(Hey Siriっぽく)
+@respond_to(r'\s+Hey\s+todo$')
+def todo_hey(message):
+    messagelist=["<タスクの登録> todo add タスク名","<タスクの一覧表示(userのみ)> todo list","<タスクの一覧表示> todo list all","<タスクの消去> todo delete id","<登録したタスクのリセット> todo reset","<タスクの検索> todo research タスク名に含まれる文字"]
+    num=random.randint(0,5)
+    message.reply(messagelist[num])
+    
 @respond_to(r'\s*todo\s+finish\s+(.*)')
 def todo_finish(message, ids):
     msg = ''

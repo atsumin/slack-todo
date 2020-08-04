@@ -24,6 +24,8 @@ ToDo 管理とその他さまざまな反応をする slackbot
   - `@bot todo finish 'id(スペースを開けて複数可能)'`: 課題の状態を未から済に変更する
   - `@bot todo reset`: ToDo の DB をリセットする
   - `@bot todo search '検索文字列'`: 検索文字列がtitleに含まれている場合、その内容を表示する
+  - `@bot todo finish 'id'`: statusが未のものを済にする
+  - `@bot todo example`: todoの入力方法の例を表示する
   - `@bot todo help`: helpを表示する
   - `@bot todo show 'id'`: 指定したidの詳細を表示する
 
