@@ -1,17 +1,16 @@
 from .sub_yonmoku import game_yonmoku as g
-from .sub_yonmoku import com
+from .sub_yonmoku import monta as AI1
 from slackbot.bot import respond_to
 from slackbot.bot import listen_to
 
 yonmokugame = None
 
 @respond_to(r"^\s*yonmoku$")
-def start_game(message):
+def start_game(message ,depth = 3):
     global yonmokugame
     if yonmokugame !=None:
         message.reply("現在のゲームを中断して新しいゲームを開始します")
-    yonmokugame = g.game()
-    yonmokugame.com = com.computer()
+    yonmokugame = g.game(AI1.AI(),depth)
     go_forward(message)
     
 

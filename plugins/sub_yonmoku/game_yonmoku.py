@@ -1,13 +1,15 @@
 import random
 from copy import copy
+from . import com
 
 class game:
-    def __init__(self):
-        # 使用するcom
-        self.com = None
+    def __init__(self, AI, depth):
 
         # player先手？1/-1
         self.playerfirst = random.randint(0,1)*2-1
+        
+        # 使用するcom
+        self.com = com.computer(AI, self.playerfirst , depth)
         
         # 何手目？
         self.step = 0
@@ -44,8 +46,8 @@ class game:
         return (self.status, self.board_list)
     
     def turn_com(self):
-        self.com.board = copy(self.board)
-        pos = self.com.set_pos()
+        board = copy(self.board)
+        pos = self.com.max_search(board, 26-self.step)[0]
         self.place(pos)
         self.step += 1
         self.board_list.append(self.board_to_str())
