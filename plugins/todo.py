@@ -3,6 +3,7 @@ from tododb import DB
 from . import tools
 import os
 import datetime
+import random
 
 @respond_to(r'\s*todo\s+delete_secret\s+(\d+)$')
 def todo_delete_secret(message, id):
@@ -104,8 +105,6 @@ def todo_example(message):
     message.reply("\n<タスクの登録> todo add タスク名\n<タスクの一覧表示(userのみ)> todo list\n<タスクの一覧表示> todo list all\n<タスクの消去> todo delete id\n<登録したタスクのリセット> todo reset\n<タスクの検索> todo research タスク名に含まれる文字\n<status未→済> todo finish id")
 
 #上の入力の例をランダムでひとつ教えてくれる(Hey Siriっぽく)
-import random
-
 @respond_to(r'\s+Hey\s+todo$')
 def todo_hey(message):
     messagelist=["<タスクの登録> todo add タスク名","<タスクの一覧表示(userのみ)> todo list","<タスクの一覧表示> todo list all","<タスクの消去> todo delete id","<登録したタスクのリセット> todo reset","<タスクの検索> todo research タスク名に含まれる文字"]
