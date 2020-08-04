@@ -6,8 +6,8 @@ class game:
         # 使用するcom
         self.com = None
 
-        # player先手？
-        self.playerfirst = random.randint(0,1)
+        # player先手？1/-1
+        self.playerfirst = random.randint(0,1)*2-1
         
         # 何手目？
         self.step = 0
@@ -31,7 +31,7 @@ class game:
                 self.judge()
         else:
             # Playerの指定した手を打つ
-            self.board[player_pos] = (-1)**self.step
+            self.place(player_pos)
             
             # 手数を追加
             self.step += 1
@@ -46,11 +46,12 @@ class game:
     def turn_com(self):
         self.com.board = copy(self.board)
         pos = self.com.set_pos()
-        self.board[pos] = (-1)**self.step
+        self.place(pos)
         self.step += 1
         self.board_list.append(self.board_to_str())
                 
-
+    def place(self,pos):
+        self.board[pos] = (-1)**(self.step-1)
 
     def board_to_str(self):
         mark={-1:":white_circle:", 0:":red_circle:", 1:":black_circle:"}
@@ -64,8 +65,25 @@ class game:
         return str_board
 
     def judge(self):
-        finished = False
-
+        # 縦、横、斜めについて４つ揃っているか判定
+        places = [
+            (5, [i for i in range(10)]),
+            (1, [0, 1, 5, 6, 10, 11, 15, 16, 20, 21]),
+            (6, [0, 1, 5, 6]),
+            (4, [3, 4, 8, 9]),
+        ]
+        for itv, place in places:
+            for i in place:
+                k = sum(self.board[i: i + 3 * itv + 1: itv])
+                if k == 4:
+                    self.status = 1*self.playerfirst
+                    return True
+                if k == -4:
+                    self.status = -1*self.playerfirst
+                    return True
+            if self.step == 26:
+                self.status = 2
+                return True
         # 一応決着がついたかを戻り値でも返すことにする
-        return finished
+        return False
         
