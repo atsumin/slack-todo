@@ -8,6 +8,13 @@ ToDo 管理とその他さまざまな反応をする slackbot
 * plugins/fizzbuzz.py
   - `@bot fizzbuzz {数字}`: bot 宛の 'fizzbuzz {数字}' に対して Fizz Buzz ゲームの反応
 
+* plugins/yonmoku.py
+  - `@bot yonmoku`: 5*5の盤面で先に四目並べたほうが勝利のゲームを開始する vs CPU
+  - `@bot yonmoku easy`: 5*5の盤面で先に四目並べたほうが勝利のゲームを開始する vs CPU(weak)
+  - `@bot yonmoku set '場所'`: 進行中のゲームに対し'場所'に自分の駒を置く
+  - `!set '場所'`: 進行中のゲームに対し'場所'に自分の駒を置く
+
+
 * plugins/listen.py
   - チャンネル内で 'what' を含む文字列の発言に対して「??」と返す
   - ! で始まるものをコマンドとみなし、todo.pyと同様の内容を実行する(todoの入力は省略)
