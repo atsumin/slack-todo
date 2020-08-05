@@ -2,15 +2,26 @@ from .sub_yonmoku import game_yonmoku as g
 from .sub_yonmoku import monta as AI1
 from .sub_yonmoku import atnom as AI2
 from slackbot.bot import respond_to
-from slackbot.bot import listen_to
 
 yonmokugame = None
+
+@respond_to(r"^\s*yonmoku\s+help$")
+def yonmoku_help(message):
+    msg = "四目並べは、先手黒、後手赤として先に5*5の盤面で4つ以上まっすぐにつなげたほうが勝ちのゲームです。"
+    msg += "縦、横、斜めどれでもカウントされます。\n"
+    msg += "ゲームを開始するには、\n```@(bot名) yonmoku```\nと打って下さい。\n"
+    msg += "もし、四目並べに自信がない方は、\n```@(bot名) yonmoku easy```\nと打ってください。\n"
+    msg += "なお、この二人のcpuは完全読み切りではないです。通常のCPUに勝つことは出来るのか、弱いCPUに負けることは出来るのか！？\n是非とも一度挑戦してみてください。\n"
+    msg += "Hint: 勝ちたい場合は先手、負けたい場合は後手を選ぶと有利です。"
+    message.reply(msg)
+
 
 @respond_to(r"^\s*yonmoku$")
 def start_game(message ,depth = 3):
     global yonmokugame
     if yonmokugame !=None:
         message.reply("現在のゲームを中断して新しいゲームを開始します")
+    message.reply("ゲームの開始にはしばらく時間がかかることがあります")
     yonmokugame = g.game(AI1.AI(),depth)
     go_forward(message)
 
@@ -67,6 +78,7 @@ def go_forward(message, pos=None):
             message.reply("既に駒が置かれているところを選択しています。選び直してください。")
             return 0
         else:
+            message.reply("CPUが考えています。これには時間がかかることがあります。")
             (result, board_list) = yonmokugame.run(pos)
             for board in board_list:
                 message.reply(board)
@@ -85,6 +97,7 @@ def go_forward(message, pos=None):
                     message.reply("引き分けです。")
                     return 0
             else:
-                message.reply("どこに打ちますか？\n")
+                mark={-1:":red_circle:", 0:":white_small_square:", 1:":black_circle:"}
+                message.reply(f"あなたの駒は{mark[yonmokugame.playerfirst]}です。どこに打ちますか？\n")
         message.reply("指定例 \n`!set A1` `!set 3c`\n`@(bot名)yonmoku set a1` `@(bot名)yonmoku set 3C`")
         
