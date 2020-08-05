@@ -7,6 +7,7 @@ import threading
 import datetime
 import time
 import sys
+# 高速起動のためにnumpy,numbaをここで読み込む
 import numpy
 import numba
 
