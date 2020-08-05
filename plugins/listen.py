@@ -1,4 +1,5 @@
 from slackbot.bot import listen_to
+from . import yonmoku
 from . import todo
 import time, re
 
@@ -7,6 +8,7 @@ import time, re
 def com_set(message):
     text = message.body['text'][1:]
 
+    yonmoku_go_forward = re.search(r'^set\s*([ABCDEabcde12345]{2})\s*$', text)
     todo_add_unlimit = re.search(r'^add\s+(\S+)$', text)
     todo_add = re.search(r'^add\s+(\S+)\s+(\S+)$', text)
     todo_delete_secret = re.search(r'^delete_secret\s+(\d+)$', text)
@@ -23,7 +25,9 @@ def com_set(message):
     todo_announce = re.search(r'^announce\s+(\S+)\s+(\S+)\s+([\s\S]+)$', text)
     todo_help = re.search(r'^help', text)
 
-    if todo_add_unlimit:
+    if yonmoku_go_forward:
+        yonmoku.go_forward(message, yonmoku_go_forward.group(1))
+    elif todo_add_unlimit:
         todo.todo_add_unlimit(message, todo_add_unlimit.group(1))
     elif todo_add:
         todo.todo_add(message, todo_add.group(1), todo_add.group(2))

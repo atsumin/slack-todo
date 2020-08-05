@@ -7,6 +7,9 @@ import threading
 import datetime
 import time
 import sys
+# 高速起動のためにnumpy,numbaをここで読み込む
+import numpy
+import numba
 
 slack = Slacker(os.environ['API_TOKEN'])
 channel = os.environ['SLACK_CHANNEL']
