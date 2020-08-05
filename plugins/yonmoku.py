@@ -11,7 +11,7 @@ def yonmoku_help(message):
     msg += "縦、横、斜めどれでもカウントされます。\n"
     msg += "ゲームを開始するには、\n```@(bot名) yonmoku```\nと打って下さい。\n"
     msg += "もし、四目並べに自信がない方は、\n```@(bot名) yonmoku easy```\nと打ってください。\n"
-    msg += "なお、この二人のcpuは完全読み切りではないです。通常のCPUに勝つことは出来るのか、弱いCPUに負けることは出来るのか！？\n是非とも一度挑戦してみてください。\n"
+    msg += "なお、この二人のcomは完全読み切りではないです。通常のComに勝つことは出来るのか、弱いComに負けることは出来るのか！？\n是非とも一度挑戦してみてください。\n"
     msg += "Hint: 勝ちたい場合は先手、負けたい場合は後手を選ぶと有利です。"
     message.reply(msg)
 
@@ -78,7 +78,7 @@ def go_forward(message, pos=None):
             message.reply("既に駒が置かれているところを選択しています。選び直してください。")
             return 0
         else:
-            message.reply("CPUが考えています。これには時間がかかることがあります。")
+            message.reply("Comが考えています。これには時間がかかることがあります。")
             (result, board_list) = yonmokugame.run(pos)
             for board in board_list:
                 message.reply(board)
