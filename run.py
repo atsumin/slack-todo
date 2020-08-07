@@ -21,6 +21,21 @@ if need_init:
 database.clean()
 
 
+#素数表の作成
+k = 10000
+pn = 0
+primelist = list(range(int(k)))
+del primelist[0]
+del primelist[0]
+p = 2
+while p*p <= k:
+    for i in range(2,-(-k//p)):
+        if not primelist.count(int(i*p)) == 0:
+            tag = primelist.index(int(i*p))
+            del primelist[tag]
+    pn = pn + 1
+    p = primelist[pn]
+
 def noticeThread():
     time.sleep(10)
     while True:
@@ -40,6 +55,10 @@ def stop():
     except KeyboardInterrupt:
         print('プログラムを終了します...')
         sys.exit()
+
+
+
+    
 
 if __name__ == '__main__':
     n_t = threading.Thread(target=noticeThread)
