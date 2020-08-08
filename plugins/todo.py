@@ -294,6 +294,8 @@ def todo_help(message,comm):
     "あなたの未完了タスクを全て表示します。\n"\
     "`todo list all`\n"\
     "あなたの全てのタスクを詳細に表示します\n"\
+    "`todo show (id)`\n"\
+    "指定したidのタスクについて詳細な情報を表示します\n"\
     "`todo finish (id)`\n"\
     "指定したidのタスクを完了済みにします\n"\
     "`todo delete (id)`\n"\
