@@ -127,13 +127,11 @@ def prime_help(message,comm):
 
 @respond_to(r'^prime\s(list)$')
 def prime_list(message,comm):
-    global quizwaiting
-    if not quizwaiting == False:
-        prilist = run.primelist
-        mess = ','.join(map(str,prilist))
-        message.reply(mess)
-    else:
-        message.reply('ずるはよくないなあ')
+    prilist = run.primelist
+    mess = ','.join(map(str,prilist))
+    essage.reply(mess)
+    
+     
     
 @respond_to(r'^prime\s(\d+)$')
 def prime_judge(message,num):
