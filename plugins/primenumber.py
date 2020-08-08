@@ -129,7 +129,7 @@ def prime_help(message,comm):
 def prime_list(message,comm):
     prilist = run.primelist
     mess = ','.join(map(str,prilist))
-    essage.reply(mess)
+    message.reply(mess)
     
      
     
