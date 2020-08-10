@@ -92,6 +92,13 @@ def todo_add_note(message, title, limit_at, subject, note):
     msg=todo_add_sub(message,data)
     message.reply(msg)
 
+#status未のものを済にする
+@respond_to(r'\s+todo\s+finish\s+(\S+)$')
+def todo_finish(message, id):
+    database = DB(os.environ['TODO_DB'])
+    database.change_id(id, 'status', '済')
+    message.reply("お疲れさまでした")
+
 #exampleを表示する(Botに送信する際の入力の例)
 @respond_to(r'\s+todo\s+example$')
 def todo_example(message):
