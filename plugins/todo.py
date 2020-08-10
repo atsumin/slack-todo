@@ -288,7 +288,7 @@ def todo_add_sub(message,data:dict,announce=False) -> str:
         for item in data.items():
             if item[0]=="user":
                 continue
-            if not item[0]=="noticetime" or item[0]=="deleted":
+            if not (item[0]=="noticetime" or item[0]=="deleted"):
              msg+=f"\n{item[0]}: {item[1]}"
         return msg
     if "status" in data.keys():
@@ -347,6 +347,8 @@ def todo_help(message,comm):
     "あなたの未完了タスクを全て表示します。\n"\
     "`todo list all`\n"\
     "あなたの全てのタスクを詳細に表示します\n"\
+    "`todo show (id)`\n"\
+    "指定したidのタスクについて詳細な情報を表示します\n"\
     "`todo finish (id)`\n"\
     "指定したidのタスクを完了済みにします\n"\
     "`todo delete (id)`\n"\
