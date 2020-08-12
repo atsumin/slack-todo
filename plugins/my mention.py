@@ -6,3 +6,4 @@ import datetime
 def mention_func(message):
   dt_now = datetime.datetime.now()
   message.reply(dt_now.strftime('%H時%M分') + 'です')
+
