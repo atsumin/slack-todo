@@ -20,6 +20,12 @@ if need_init:
 #列追加、減少を自動反映
 database.clean()
 
+if not os.path.exists(dbname):
+    db = DB(dbname)
+    db.init()
+else:
+    db = DB(dbname)
+
 
 def noticeThread():
     time.sleep(10)

@@ -25,6 +25,9 @@ class DB(object):
             msg += f",{key} {DEFAULT_TYPE[key]}"
         msg += ")"
         self.__c.execute(f"create table todo {msg}")
+        self.__c.execute("create table todo" \
+                         "(id integer NOT NULL PRIMARY KEY AUTOINCREMENT, " \
+                          "title text NOT NULL, limit_at text, update_at text NOT NULL, careful text NOT NULL)")
 
     def __drop_table(self):
         """テーブルを削除する
@@ -154,9 +157,10 @@ class DB(object):
         return newdata
     
     def add(self, title, limit_at):
+    def add(self, title, limit_at, careful):
         update_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        sql = "insert into todo (title, limit_at, update_at) values (?, ?, ?)"
-        self.__c.execute(sql, [title, limit_at, update_at])
+        sql = "insert into todo (title, limit_at, update_at, careful) values (?, ?, ?, ?)"
+        self.__c.execute(sql, [title, limit_at, update_at, careful])
         self.__conn.commit()
         return newdata
 
