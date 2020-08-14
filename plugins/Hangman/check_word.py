@@ -15,6 +15,3 @@ def check_word(answer):
         print(hoge)
         counter=counter+1
     print("Right! You took "+str(counter)+" times")
-
-fuga=input("Let's Hangman! ")
-check_word(fuga)
