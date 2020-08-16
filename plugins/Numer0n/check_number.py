@@ -1,3 +1,6 @@
+from slackbot.bot import respond_to
+import config_Numer0n
+
 def check(guess,answer):
     global bite_counter,eat_counter
     bite_counter=0
@@ -10,21 +13,19 @@ def check(guess,answer):
                 else:
                     bite_counter=bite_counter+1
 
-    print(str(eat_counter)+" eat&"+str(bite_counter)+" bite") 
-
+    message.reply(str(eat_counter)+" eat&"+str(bite_counter)+" bite")
 
 def check_and_count(guess,answer):
-    count_try=1
+    config_Numer0n.count_try=config_Numer0n.count_try+1
     check(guess,answer)
-    while eat_counter!=len(answer):
-            guess=input("Try agaein!")
-            check(guess,answer)
-            count_try=count_try+1
-    if count_try!=1:
-        print("Right. The answer is "+answer+". You took "+str(count_try)+" times.")
+    if eat_counter==len(answer):     
+        if config_Numer0n.count_try!=1:
+            message.reply("Right. The answer is "+answer+". You took "+str(config_Numer0n.count_try)+" times.")
 
+        else:
+            message.reply("Unbelievable! The answer is "+answer+". You took only once!")
     else:
-        print("Unbelievable! The answer is "+answer+". You took only once!")
+        message.reply("Try Again!")
 
 
 

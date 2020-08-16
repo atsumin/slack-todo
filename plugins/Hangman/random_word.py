@@ -1,4 +1,7 @@
+import config_Hangman
 import random
+from slackbot.bot import respond_to
+
 words=['slack','python','root','clock','environment','pencil','hangman','twitter','vacation','vaccine','quality','excellent',
        'justice','ax','boy','github','panda','kangaroo','bamboo','pentagon','freedom','communication','quater','weekend',
        'fake','champion','queen','elephant','typhoon','children','cherry','chapsticks','carbondioxide','kingdom','prestige',
@@ -8,11 +11,11 @@ def random_word():
     global guess
     global answer
     answer=words[random.randint(0,len(words)-1)]
-    fuga="*"*(len(answer))
-    print(fuga)
-    guess=input("What's your guess?")
+    config_Hangman.hoge=config_Hangman.hoge*(len(answer))
+    cofig_Hangman.fuga=answer
+    message.reply(config_Hangman.hoge)
+    message.reply("What's your guess?")
 
 
-#ワード数表示（完成したらなくす）
-print("There are "+str(len(words))+" words in the list.")
+
                 

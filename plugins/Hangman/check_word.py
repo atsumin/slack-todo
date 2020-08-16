@@ -1,17 +1,23 @@
-def check_word(answer):
-    hoge="*"*(len(answer))
-    print(hoge)
-    counter=0
-    while hoge != answer:
-        guess=input("guess alphabet or answer! ")
-        if len(guess)==1:
-            if guess in answer:
-                for i in range(len(answer)):
-                    if answer[i]==guess:
-                        hoge=hoge[0:i]+guess+hoge[i+1:len(hoge)]
-        else:
-            if guess==answer:
-                hoge=answer                
-        print(hoge)
-        counter=counter+1
-    print("Right! You took "+str(counter)+" times")
+from slackbot.bot import respond_to
+import config_Hangman
+
+def check_word(answer,guess):
+    config_Hangman.count_try_word=config_Hangman.count_try_word+1
+    if len(guess)==1:
+        if guess in answer:            
+            for i in range(len(answer)):                
+                if answer[i]==guess:                    
+                    config_Hangman.hoge=config_Hangman.hoge[0:i]+guess+config_Hangman.hoge[i+1:len(config_Hangman.hoge)]
+    else:
+           if guess==answer:
+                config_Hangman.hoge=answer
+
+
+
+    if config_Hangman.hoge!=answer:
+        message.reply(config_Hangman.hoge)
+        message.reply("Try again!")
+        
+    else:
+        message.reply(answer)
+        message.reply("Right! You took "+str(config_Hangman.count_try_word)+" times.")
