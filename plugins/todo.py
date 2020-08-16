@@ -328,8 +328,8 @@ def todo_view(data, info_str) -> str:
     return str_list
         
 #ToDo機能についての説明を表示する
-@respond_to(r'^todo\s(help)$')
-def todo_help(message,comm):
+@respond_to(r'^todo\shelp$')
+def todo_help(message):
     msg = \
     "\n〇ToDo機能が扱うデータ名とその意味\n"\
     "id(変更不可): タスクの個別識別番号です。`1`というように表示されます\n"\
