@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import config_Hangman
 import random
 from slackbot.bot import respond_to
@@ -19,3 +20,8 @@ def random_word():
 
 
                 
+=======
+words=list=["ax","boy","github","fake","champion","queen","elephant","typhoon","children","cherry","fireworks","doctor","chemistry",
+            "mouse","genius","chocolate","mathematics","newton","halloween","physics","rhythm"]
+            
+>>>>>>> origin/omatsu

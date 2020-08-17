@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from slackbot.bot import respond_to
 import config_Hangman
 
@@ -21,3 +22,6 @@ def check_word(answer,guess):
     else:
         message.reply(answer)
         message.reply("Right! You took "+str(config_Hangman.count_try_word)+" times.")
+=======
+check the word 
+>>>>>>> origin/omatsu
