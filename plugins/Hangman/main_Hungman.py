@@ -3,7 +3,7 @@ import random_word
 import check_word
 import config_Hangman
 
-@respond_to('Hangman')
+@respond_to('Hangman\s+start$')
 def Hangman(message):
     message.reply("Let's play Hangman!")
 
